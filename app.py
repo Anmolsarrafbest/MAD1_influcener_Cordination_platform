@@ -75,6 +75,17 @@ def returns():
         return render_template("sponser.html")
     else:
         return render_template('user.html')
+@app.route("/login",methods=['GET'])
+def loginadmin():
+    return render_template('admin.html')
+
+@app.route("/login_users",methods=["GET"])
+def loginuser():
+    return render_template('all.html')
+
+@app.route("/login_camp",methods=["GET"])
+def logincamp():
+    return render_template('allcamp.html')
 
 if __name__=="__main__":
     app.run(debug=True)
