@@ -1,0 +1,9 @@
+.nav-bar{
+    display: flex;
+    align-items: flex-end;
+
+}
+
+#users{
+    margin-left: 20px;
+}

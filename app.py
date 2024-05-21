@@ -67,7 +67,10 @@ def returns():
     password=request.form['pass']
     role=request.form['role']
     if role =="Admin":
-        return render_template('admin.html')
+        if username=="admin_anmol" and password=="india@2024":
+            return render_template('admin.html')
+        else:
+            return render_template('Notadmin.html')
     elif role=="Sponsers":
         return render_template("sponser.html")
     else:
