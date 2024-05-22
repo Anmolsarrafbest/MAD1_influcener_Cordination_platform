@@ -72,7 +72,7 @@ def returns():
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
-        return render_template("sponser.html")
+        return render_template("sponserdetails.html")
     else:
         return render_template('user.html')
 @app.route("/login",methods=['GET'])
@@ -86,6 +86,11 @@ def loginuser():
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
     return render_template('allcamp.html')
+
+@app.route("/sponserdetails" ,methods=["POST"])
+def sponser_details():
+    return render_template("sponser_home.html")
+
 
 if __name__=="__main__":
     app.run(debug=True)
