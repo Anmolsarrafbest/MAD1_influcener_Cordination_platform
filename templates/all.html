@@ -24,6 +24,10 @@
     </div>
     <div>
         Here, you will find all details of users.
+        <br>
+        {% for user in details %}
+            {{ user.username }}
+        {% endfor %}    
     </div>
 </body>
 </html>

@@ -66,22 +66,31 @@ def returns():
     username=request.form['username']
     password=request.form['pass']
     role=request.form['role']
+    # nuser=user(username=username,password=password)
+    # db.session.add(nuser)
+    # db.session.commit()
     if role =="Admin":
         if username=="admin_anmol" and password=="india@2024":
             return render_template('admin.html')
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
-        return render_template("sponserdetails.html")
+        ans=db.session.query(user).filter(user.username==username)
+        if ans is None:    
+            return render_template("sponserdetails.html")
+        else:
+            return render_template('404.html')
     else:
         return render_template('user.html')
+    
 @app.route("/login",methods=['GET'])
 def loginadmin():
     return render_template('admin.html')
 
 @app.route("/login_users",methods=["GET"])
 def loginuser():
-    return render_template('all.html')
+    det=db.session.query(user).filter(user.username==user.username)
+    return render_template('all.html',details=det)
 
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
@@ -89,8 +98,17 @@ def logincamp():
 
 @app.route("/sponserdetails" ,methods=["POST"])
 def sponser_details():
+    cname=request.form["company_name"]
+    paisa=request.form["budget"]
+    indus=request.form["industry"]
+    newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus)
+    db.session.add(newSpon)
+    db.session.commit()
     return render_template("sponser_home.html")
 
+# @app.route("/resolve",methods=["GET"])
+# def resolve():
+#     pass
 
 if __name__=="__main__":
     app.run(debug=True)
