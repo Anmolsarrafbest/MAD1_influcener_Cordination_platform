@@ -75,13 +75,27 @@ def returns():
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
+        #write code for the who had already registerd
+        pass
+    else:
+        return render_template('user.html')
+
+@app.route("/regsiter",methods=["POST"])
+def value():
+    role=request.form["role"]
+    username=request.form['username']
+    password=request.form['pass']
+    if role=='Sponsers':
         ans=db.session.query(user).filter(user.username==username)
-        if ans is None:    
+        if ans is None:
+            nuser=user(username=username,password=password)
+            db.session.add(nuser)
+            db.session.commit()    
             return render_template("sponserdetails.html")
         else:
             return render_template('404.html')
     else:
-        return render_template('user.html')
+        return render_template("user_details.html")    
     
 @app.route("/login",methods=['GET'])
 def loginadmin():
