@@ -101,17 +101,24 @@ def value():
     role=request.form["role"]
     user1=request.form["username"]
     password=request.form['pass']
+    ans=db.session.query(user).filter(user.username==user1).first()
     if role=="Sponsers":
-        ans=db.session.query(user).filter(user.username==user1).first()
-        if ans is None:
+        if ans==user1:
+            return render_template('usernotallowed.html',ans=ans,user1=user1)
+        else:
             nuser=user(username=user1,password=password,role=role)
             db.session.add(nuser)
             db.session.commit()    
             return render_template("sponserdetails.html",user1=user1)
-        else:
+    elif role=="user":
+        if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
-    else:
-        return render_template("user_details.html")    
+        else:
+            nuser=user(username=user1,password=password,role=role)
+            db.session.add(nuser)
+            #db.session.commit()    
+            return render_template("user_details.html",user1=user1,role=role,password=password)
+
     
 @app.route("/login",methods=['GET'])
 def loginadmin():
@@ -137,9 +144,20 @@ def sponser_details():
     db.session.commit()
     return render_template("sponser_home.html")
 
-# @app.route("/resolve",methods=["GET"])
-# def resolve():
-#     pass
+@app.route("/userdetails",methods=["POST"])
+def resolve():
+    user1=request.form['username']
+    naam=request.form['vname']
+    Cate=request.form['cate']
+    Niche=request.form['niche']
+    reach=request.form['follows']
+    #user_id=request.form['user']
+    ans=db.session.query(user).filter(user.username==user1).first()
+    info1=influencer(name=naam,Category=Cate,Niche=Niche,reach=reach)
+    db.session.add(info1)
+    db.session.commit()
+    v=ans.user_id
+    return render_template('user.html',v=v)
 
 if __name__=="__main__":
     app.run(debug=True)

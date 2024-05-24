@@ -6,7 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="POST" action="/register" id = "data-form">
+    <form method="POST" action="/userdetails" id = "data-form">
+        <div >
+            <input type="hidden" name="username" value="{{ user1 }}" />
+        </div>
+        <div >
+            <input type="hidden" name="pass" value="{{ password }}" />
+        </div>
+        <div >
+            <input type="hidden" name="role" value="{{ role}}" />
+        </div>
         <div>
             <label>Name: </label>
             <input type="placeholder" name="vname"  />
