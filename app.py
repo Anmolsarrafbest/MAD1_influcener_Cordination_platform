@@ -17,6 +17,7 @@ class user(db.Model):
     user_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
     username=db.Column(db.String, unique=True,nullable=False)
     password=db.Column(db.String,nullable=False)
+    role=db.Column(db.String)
 
 class influencer(db.Model):
     __tablename__='influcener'
@@ -34,6 +35,7 @@ class Sponsers(db.Model):
     industry=db.Column(db.String)
     budget=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
+    campaignss=db.relationship('campaigns',backref="sponser",lazy=True)
 
 class campaigns(db.Model):
     __tablename__='campaign'
@@ -63,22 +65,33 @@ def home():
 
 @app.route("/",methods=['POST'])
 def returns():
-    username=request.form['username']
+    use2=request.form['username']
     password=request.form['pass']
     role=request.form['role']
-    # nuser=user(username=username,password=password)
-    # db.session.add(nuser)
-    # db.session.commit()
+    ans=db.session.query(user).filter(user.username==use2).first()
+    passs=db.session.query(user).filter(user.password==password).first()
     if role =="Admin":
-        if username=="admin_anmol" and password=="india@2024":
+        if use2=="admin_anmol" and password=="india@2024":
             return render_template('admin.html')
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
+        
         #write code for the who had already registerd
-        pass
+        if ans==None or passs==None:
+            return render_template("Notregistered.html")
+        elif ans.username==use2 and password==passs.password:
+            return render_template("sponser_home")
+        else:
+            return render_template("Notregistered.html")
     else:
-        return render_template('user.html')
+        if ans==None or passs==None:
+            return render_template("Notregistered.html")
+        elif ans.username==use2 and password==passs.password:
+            return render_template("user.html",ans=ans)
+        else:
+            return render_template("Notregistered.html")
+    
 @app.route("/register",methods=["GET"])
 def getdet():
     return render_template("register.html")    
@@ -91,9 +104,9 @@ def value():
     if role=="Sponsers":
         ans=db.session.query(user).filter(user.username==user1).first()
         if ans is None:
-            nuser=user(username=user1,password=password)
+            nuser=user(username=user1,password=password,role=role)
             db.session.add(nuser)
-            #db.session.commit()    
+            db.session.commit()    
             return render_template("sponserdetails.html",user1=user1)
         else:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
@@ -121,7 +134,7 @@ def sponser_details():
     indus=request.form["industry"]
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus)
     db.session.add(newSpon)
-    #db.session.commit()
+    db.session.commit()
     return render_template("sponser_home.html")
 
 # @app.route("/resolve",methods=["GET"])
