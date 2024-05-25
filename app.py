@@ -81,14 +81,15 @@ def returns():
         if ans==None or passs==None:
             return render_template("Notregistered.html")
         elif ans.username==use2 and password==passs.password:
-            return render_template("sponser_home")
+            return render_template("sponser_home.html",ans=ans)
         else:
             return render_template("Notregistered.html")
     else:
         if ans==None or passs==None:
             return render_template("Notregistered.html")
         elif ans.username==use2 and password==passs.password:
-            return render_template("user.html",ans=ans)
+            user1=ans.username
+            return render_template("user.html",user1=user1)
         else:
             return render_template("Notregistered.html")
     
@@ -106,17 +107,12 @@ def value():
         if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
         else:
-            nuser=user(username=user1,password=password,role=role)
-            db.session.add(nuser)
-            db.session.commit()    
-            return render_template("sponserdetails.html",user1=user1)
+            return render_template("sponserdetails.html",user1=user1,password=password,role=role)
     elif role=="user":
         if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
         else:
-            nuser=user(username=user1,password=password,role=role)
-            db.session.add(nuser)
-            #db.session.commit()    
+            
             return render_template("user_details.html",user1=user1,role=role,password=password)
 
     
@@ -139,25 +135,33 @@ def sponser_details():
     cname=request.form["company_name"]
     paisa=request.form["budget"]
     indus=request.form["industry"]
+    usernames=request.form["user1"]
+    passwords=request.form["password"]
+    roles=request.form['role']
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus)
+    nuser=user(username=usernames,password=passwords,role=roles)
+    db.session.add(nuser)
+    db.session.commit()    
     db.session.add(newSpon)
     db.session.commit()
-    return render_template("sponser_home.html")
+    return render_template("sponser_home.html",usernames=usernames,passwords=passwords)
 
 @app.route("/userdetails",methods=["POST"])
 def resolve():
     user1=request.form['username']
+    pass1=request.form["pass"]
+    role1=request.form["role"]
     naam=request.form['vname']
     Cate=request.form['cate']
     Niche=request.form['niche']
     reach=request.form['follows']
-    #user_id=request.form['user']
-    ans=db.session.query(user).filter(user.username==user1).first()
+    nuser=user(username=user1,password=pass1,role=role1)
+    db.session.add(nuser)
+    db.session.commit()    
     info1=influencer(name=naam,Category=Cate,Niche=Niche,reach=reach)
     db.session.add(info1)
     db.session.commit()
-    v=ans.user_id
-    return render_template('user.html',v=v)
+    return render_template('user.html',user1=user1)
 
 if __name__=="__main__":
     app.run(debug=True)
