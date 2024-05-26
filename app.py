@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect
 from flask_sqlalchemy import SQLAlchemy
 import jinja2
 
@@ -72,7 +72,8 @@ def returns():
     passs=db.session.query(user).filter(user.password==password).first()
     if role =="Admin":
         if use2=="admin_anmol" and password=="india@2024":
-            return render_template('admin.html')
+            data=db.session.query(user).all()
+            return render_template('admin.html',data=data)
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
@@ -118,7 +119,8 @@ def value():
     
 @app.route("/login",methods=['GET'])
 def loginadmin():
-    return render_template('admin.html')
+    data=db.session.query(user).all()
+    return render_template('admin.html',data=data)
 
 @app.route("/login_users",methods=["GET"])
 def loginuser():
@@ -127,10 +129,12 @@ def loginuser():
 
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
+
     return render_template('allcamp.html')
 
 @app.route("/sponserdetails" ,methods=["POST"])
 def sponser_details():
+    
     id=db.session.query(user).filter()
     cname=request.form["company_name"]
     paisa=request.form["budget"]
@@ -163,5 +167,19 @@ def resolve():
     db.session.commit()
     return render_template('user.html',user1=user1)
 
+@app.route("/create_camp/<int:user_id>")
+def start(user_id):
+    user2 = db.session.query(user).get(user_id)
+    iduser=user_id
+
+    return render_template("just.html",user2=user2)
+
+@app.route("/campdetails",methods=["POST"])
+def campdet():
+    id=request.form["userid"]
+    ans=db.session.query(user).get(id)
+    return render_template("sponser_home.html",ans=ans)
+
+    
 if __name__=="__main__":
     app.run(debug=True)

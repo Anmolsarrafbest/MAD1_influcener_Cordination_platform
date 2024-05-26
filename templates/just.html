@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form id="data-form" action="/campdetails" method="POST">
+        <div>
+            <input type="hidden" name="userid" value="{{user2.user_id}}">
+        </div>
+        <div>
+            Name of the campaign: 
+            <input type="placeholder" name="nameofcamp">
+        </div>
+        <br>
+        <div>
+            start-date:
+            <input type="date" name="startime">
+        </div>
+        <br>
+        <div>
+            end-date:
+            <input type="date" name="endtime">
+        </div>
+        <br>
+        <div>
+            budget:
+            <input type="placeholder" name="budget">
+        </div>
+        <br>
+        <div>
+            visiblity:
+            <select name="visiblity">
+                <option>hidden</option>
+                <option>visible</option>
+            </select>
+        </div>
+        <br>
+        <div>
+            goals:
+            <input type="text" name="goals">
+        </div>
+        <br>
+        <input type="submit" name="submit">
+    </form>
+</body>
+</html>
