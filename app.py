@@ -108,7 +108,7 @@ def value():
         if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
         else:
-            return render_template("sponserdetails.html",user1=user1,password=password,role=role)
+            return render_template("sponserdetails.html",ans=ans,user1=user1,password=password,role=role)
     elif role=="user":
         if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
@@ -144,11 +144,12 @@ def sponser_details():
     roles=request.form['role']
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus)
     nuser=user(username=usernames,password=passwords,role=roles)
+    ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
     db.session.commit()    
     db.session.add(newSpon)
     db.session.commit()
-    return render_template("sponser_home.html",usernames=usernames,passwords=passwords)
+    return render_template("sponser_home.html",ans=ans,usernames=usernames,passwords=passwords)
 
 @app.route("/userdetails",methods=["POST"])
 def resolve():

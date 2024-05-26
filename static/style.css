@@ -7,3 +7,18 @@
 #users{
     margin-left: 20px;
 }
+
+.form_data{
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 100vh; 
+}
+
+#data-form{
+    display: block;
+}
+#buttons{
+    display: flex;
+    justify-content: space-between;
+}
