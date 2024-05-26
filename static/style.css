@@ -1,7 +1,12 @@
+*{
+    font-family:Tahoma, Geneva, Verdana, sans-serif;
+    
+    height: auto;
+}
+
 .nav-bar{
     display: flex;
     align-items: flex-end;
-
 }
 
 #users{
@@ -13,6 +18,7 @@
     align-items: center; 
     justify-content: center; 
     min-height: 100vh; 
+    margin-left: 55%;
 }
 
 #data-form{
@@ -21,4 +27,8 @@
 #buttons{
     display: flex;
     justify-content: space-between;
+}
+.image{
+    background-image: url("Slide1.JPG");
+    background-size: cover;
 }

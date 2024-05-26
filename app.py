@@ -172,7 +172,7 @@ def resolve():
 def start(user_id):
     user2 = db.session.query(user).get(user_id)
     iduser=user_id
-
+    
     return render_template("just.html",user2=user2)
 
 @app.route("/campdetails",methods=["POST"])
@@ -180,7 +180,6 @@ def campdet():
     id=request.form["userid"]
     ans=db.session.query(user).get(id)
     return render_template("sponser_home.html",ans=ans)
-
     
 if __name__=="__main__":
     app.run(debug=True)
