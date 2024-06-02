@@ -1,7 +1,7 @@
 *{
     font-family:Tahoma, Geneva, Verdana, sans-serif;
-    
     height: auto;
+    
 }
 
 .nav-bar{
@@ -19,6 +19,7 @@
     justify-content: center; 
     min-height: 100vh; 
     margin-left: 55%;
+    color: white;
 }
 
 #data-form{
@@ -28,7 +29,17 @@
     display: flex;
     justify-content: space-between;
 }
+
 .image{
-    background-image: url("Slide1.JPG");
+    background-color: #111D4A;
+    /* background-image: url("Slide1.JPG"); */
     background-size: cover;
+}
+
+/* .btn-primary{
+    background-color:
+    
+} */
+#intro{
+    color: white;
 }

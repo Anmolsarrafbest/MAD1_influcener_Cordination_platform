@@ -134,22 +134,24 @@ def logincamp():
 
 @app.route("/sponserdetails" ,methods=["POST"])
 def sponser_details():
-    
-    id=db.session.query(user).filter()
+    id=request.form["user1"]
     cname=request.form["company_name"]
     paisa=request.form["budget"]
     indus=request.form["industry"]
     usernames=request.form["user1"]
     passwords=request.form["password"]
     roles=request.form['role']
-    newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus)
+    
     nuser=user(username=usernames,password=passwords,role=roles)
     ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
-    db.session.commit()    
+    db.session.commit()
+    user_det=db.session.query(user).filter(user.username==id).first() 
+    print(user_det.user_id)  
+    newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus,user_id=user_det.user_id) 
     db.session.add(newSpon)
     db.session.commit()
-    return render_template("sponser_home.html",ans=ans,usernames=usernames,passwords=passwords)
+    return render_template("sponser_home.html",user_det=user_det,ans=ans,usernames=usernames,passwords=passwords)
 
 @app.route("/userdetails",methods=["POST"])
 def resolve():
@@ -172,13 +174,21 @@ def resolve():
 def start(user_id):
     user2 = db.session.query(user).get(user_id)
     iduser=user_id
-    
     return render_template("just.html",user2=user2)
 
 @app.route("/campdetails",methods=["POST"])
 def campdet():
     id=request.form["userid"]
+    campname=request.form["nameofcamp"]
+    stime=request.form["startime"]
+    dtime=request.form["endtime"]
+    budg=request.form["budget"]
+    visiblity=request.form["visiblity"]
+    goals=request.form["goals"]
+    description=request.form["description"]
+    campaign1=campaigns(name=campname,star_date=stime,end_date=dtime,budget=budg,description=description,visiblity=visiblity)
     ans=db.session.query(user).get(id)
+
     return render_template("sponser_home.html",ans=ans)
     
 if __name__=="__main__":
