@@ -151,9 +151,8 @@ def sponser_details():
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus,user_id=user_det.user_id) 
     db.session.add(newSpon)
     db.session.commit()
-    flash('You have been successfully registered!', 'success')
-    return redirect("/")
-    #return render_template("sponser_home.html",user_det=user_det,ans=ans,usernames=usernames,passwords=passwords)
+    flash('You have been successfully registered! please logg in ')    
+    return render_template("logging.html")
 
 @app.route("/userdetails",methods=["POST"])
 def resolve():

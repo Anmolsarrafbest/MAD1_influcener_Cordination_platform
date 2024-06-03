@@ -14,6 +14,19 @@
         <div id="intro">
             Welcome 
         </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            <li>{{ message }}</li>
+          </div>
+
+         {% endfor %}
+        </ul>
+         {% endif %}
+        {% endwith %}
         <div class="form_data">
             <form method="POST" action="/" id = "data-form">
                 <div class="mb-3">
