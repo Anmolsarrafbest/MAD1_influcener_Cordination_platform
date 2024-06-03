@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,flash
 from flask_sqlalchemy import SQLAlchemy
 import jinja2
 
@@ -9,6 +9,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.sqlite3"
 db = SQLAlchemy()
 db.init_app(app)
 app.app_context().push()
+app.secret_key = '123456789Anmol'
 
 # defining models
 
@@ -71,7 +72,7 @@ def returns():
     ans=db.session.query(user).filter(user.username==use2).first()
     passs=db.session.query(user).filter(user.password==password).first()
     if role =="Admin":
-        if use2=="admin_anmol" and password=="india@2024":
+        if use2=="admin_anmol" and password=="2024":
             data=db.session.query(user).all()
             return render_template('admin.html',data=data)
         else:
@@ -141,7 +142,6 @@ def sponser_details():
     usernames=request.form["user1"]
     passwords=request.form["password"]
     roles=request.form['role']
-    
     nuser=user(username=usernames,password=passwords,role=roles)
     ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
@@ -151,7 +151,9 @@ def sponser_details():
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus,user_id=user_det.user_id) 
     db.session.add(newSpon)
     db.session.commit()
-    return render_template("sponser_home.html",user_det=user_det,ans=ans,usernames=usernames,passwords=passwords)
+    flash('You have been successfully registered!', 'success')
+    return redirect("/")
+    #return render_template("sponser_home.html",user_det=user_det,ans=ans,usernames=usernames,passwords=passwords)
 
 @app.route("/userdetails",methods=["POST"])
 def resolve():
@@ -174,6 +176,7 @@ def resolve():
 def start(user_id):
     user2 = db.session.query(user).get(user_id)
     iduser=user_id
+
     return render_template("just.html",user2=user2)
 
 @app.route("/campdetails",methods=["POST"])
@@ -188,7 +191,6 @@ def campdet():
     description=request.form["description"]
     campaign1=campaigns(name=campname,star_date=stime,end_date=dtime,budget=budg,description=description,visiblity=visiblity)
     ans=db.session.query(user).get(id)
-
     return render_template("sponser_home.html",ans=ans)
     
 if __name__=="__main__":
