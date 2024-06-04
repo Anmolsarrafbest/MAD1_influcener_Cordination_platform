@@ -83,7 +83,9 @@ def returns():
         if ans==None or passs==None:
             return render_template("Notregistered.html")
         elif ans.username==use2 and password==passs.password:
-            return render_template("sponser_home.html",ans=ans)
+            id=ans.user_id
+            return redirect(f"/sponserhome/{id}")
+            # return render_template("sponser_home.html",ans=ans)
         else:
             return render_template("Notregistered.html")
     else:
@@ -130,7 +132,6 @@ def loginuser():
 
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
-
     return render_template('allcamp.html')
 
 @app.route("/sponserdetails" ,methods=["POST"])
@@ -181,6 +182,10 @@ def start(user_id):
 @app.route("/campdetails",methods=["POST"])
 def campdet():
     id=request.form["userid"]
+    sponser_id=db.session.query(Sponsers).filter(Sponsers.user_id==id).first()
+    print(id)
+    print(sponser_id)
+    print(sponser_id.user_id)
     campname=request.form["nameofcamp"]
     stime=request.form["startime"]
     dtime=request.form["endtime"]
@@ -188,9 +193,25 @@ def campdet():
     visiblity=request.form["visiblity"]
     goals=request.form["goals"]
     description=request.form["description"]
-    campaign1=campaigns(name=campname,star_date=stime,end_date=dtime,budget=budg,description=description,visiblity=visiblity)
     ans=db.session.query(user).get(id)
-    return render_template("sponser_home.html",ans=ans)
+    campaign1=campaigns(sponser_id=sponser_id.user_id,
+                        name=campname,
+                        start_date=stime,
+                        end_date=dtime,
+                        budget=budg,
+                        description=description,
+                        Visibility=visiblity,
+                        goals=goals)
+    db.session.add(campaign1)
+    db.session.commit()
+    return redirect(f"/sponserhome/{id}")
+    # return render_template("sponser_home.html",ans=ans)
+
+@app.route("/sponserhome/<int:id>",methods=["GET"])
+def sponser_login(id):
+    ans=db.session.query(user).get(id)
+    campdata=db.session.query(campaigns).all()
+    return render_template("sponser_home.html",ans=ans,campdata=campdata)
     
 if __name__=="__main__":
     app.run(debug=True)

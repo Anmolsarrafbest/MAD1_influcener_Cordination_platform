@@ -11,14 +11,25 @@
 
 </head>
 <body>
-    {{ans.user_id}}
+    {{ans.username}}
     {{usernames}} 
     {{passwords}}
     {{id}}
-    
     <div>
         <a href="/create_camp/{{ ans.user_id }}"><button>create a campaign</button></a>
     </div>
-     
+    <br>
+    <table class="table table-success table-striped">
+    {% for camp in campdata %}
+        <tr>
+            <th>Campagin names </th>
+            <th>Goals</th>
+        </tr>
+        <tr>
+        <td>{{camp.name}}</td>
+        <td>{{camp.goals}}</td>
+        </tr>
+    {% endfor %}
+    </table>
 </body>
 </html>
