@@ -214,4 +214,4 @@ def sponser_login(id):
     return render_template("sponser_home.html",ans=ans,campdata=campdata)
     
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run(debug=True,host=8080)
