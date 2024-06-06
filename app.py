@@ -219,11 +219,28 @@ def some1(campaigns_id):
     print(data)
     return render_template("campdetails.html",data=data)
 
-@app.route("/edit_campdetails/<int:campaigns_id>",methods=["GET"])
+@app.route("/edit_campdetails/<int:campaigns_id>",methods=["GET","POST"])
 def updatecamp(campaigns_id):
-    data=db.session.query(campaigns).get(campaigns_id)
-    print(data)
-    return render_template("update_campdetails.html",data=data)
-
+    if request.method=="GET":
+        data=db.session.query(campaigns).get(campaigns_id)
+        return render_template("update_campdetails.html",data=data)
+    elif request.method=="POST":
+        data=db.session.query(campaigns).get(campaigns_id)
+        print(data.name)
+        name=request.form["Name"]
+        goals=request.form["Goals"]
+        start_date=request.form["sdate"]
+        end_date=request.form["edate"]
+        budget=request.form["budget"]
+        description=request.form["description"]
+        data.name=name
+        data.goals=goals
+        data.start_date=start_date
+        data.end_date=end_date
+        data.budget=budget
+        data.description=description
+        db.session.commit()
+        return redirect(f"/sponserhome/{data.sponser_id}")
+    
 if __name__=="__main__":
     app.run(debug=True)

@@ -10,7 +10,7 @@
 </head>
 <body>
     here you can update the form details<br>
-    <form class="row g-3">
+    <form class="row g-3" method="POST" action="/edit_campdetails/{{data.campaigns_id}}">
         <div class="col-md-6">
             <label for="inputCity" class="form-label">Name: </label>
             <input type="text" class="form-control" id="name" value="{{data.name}}" name="Name">
@@ -35,6 +35,10 @@
             <label for="inputCity" class="form-label">description</label>
             <input type="text" class="form-control" id="name" value="{{data.description}}" name="description">
         </div>
+        <div class="col-12">
+            <a href=""><button type="submit" class="btn btn-primary">cancel</button></a>
+            <button type="submit" class="btn btn-primary">update</button>
+          </div>
     </form>
     <br>
     <!-- name: {{data.name}}<br>
@@ -44,7 +48,5 @@
     enddate: {{data.end_date}}<br>
     description: {{data.description}}<br> -->
     
-    <a><button>Cancel</button></a>
-    <a href="/edit_campdetails"></a><button>update</button></a>
 </body>
 </html>
