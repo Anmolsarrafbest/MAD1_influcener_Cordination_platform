@@ -215,9 +215,15 @@ def sponser_login(id):
 
 @app.route("/update_camp_details/<int:campaigns_id>",methods=["GET"])
 def some1(campaigns_id):
-    campdata=db.session.query(campaigns).get(campaigns_id)
-    print(campdata)
-    return render_template("campupdate.html")
+    data=db.session.query(campaigns).get(campaigns_id)
+    print(data)
+    return render_template("campdetails.html",data=data)
+
+@app.route("/edit_campdetails/<int:campaigns_id>",methods=["GET"])
+def updatecamp(campaigns_id):
+    data=db.session.query(campaigns).get(campaigns_id)
+    print(data)
+    return render_template("update_campdetails.html",data=data)
 
 if __name__=="__main__":
     app.run(debug=True)
