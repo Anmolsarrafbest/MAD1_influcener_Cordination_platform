@@ -20,16 +20,19 @@
     </div>
     <br>
     <table class="table table-success table-striped">
-    {% for camp in campdata %}
         <tr>
-            <th>Campagin names </th>
+            <th>Campagin names</th>
             <th>Goals</th>
+            <th>Details</th>
         </tr>
+        {% for camp in campdata %}
+        
         <tr>
-        <td>{{camp.name}}</td>
-        <td>{{camp.goals}}</td>
+            <td>{{camp.name}}</td>
+            <td>{{camp.goals}}</td>
+            <td><a href="/update_camp_details/{{camp.campaigns_id}}"><button> Details</button></a></td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </table>
 </body>
 </html>

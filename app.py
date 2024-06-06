@@ -212,6 +212,12 @@ def sponser_login(id):
     ans=db.session.query(user).get(id)
     campdata=db.session.query(campaigns).all()
     return render_template("sponser_home.html",ans=ans,campdata=campdata)
-    
+
+@app.route("/update_camp_details/<int:campaigns_id>",methods=["GET"])
+def some1(campaigns_id):
+    campdata=db.session.query(campaigns).get(campaigns_id)
+    print(campdata)
+    return render_template("campupdate.html")
+
 if __name__=="__main__":
-    app.run(debug=True,host=8080)
+    app.run(debug=True)
