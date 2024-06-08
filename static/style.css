@@ -82,3 +82,40 @@
     margin-right: 200px;
 }
 
+.form-select{
+    width: 100px;
+    background-color: #b6dcfe;
+}
+.det{
+    margin-left: 15%;
+    margin-right: 15%;   
+    background-color: antiquewhite;
+    margin-top: 30px;
+    justify-content: center;
+    align-self: center;
+} 
+
+.g-3{
+    border: 8px solid white;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-right: 500px;
+}
+
+/* .col-md-6{
+    width: 100%;
+} */
+
+#names{
+    height: 70px;
+    text-wrap:balance;
+
+}
+
+.text-break{
+    height: 150px;
+    width: 200%;
+}
+
