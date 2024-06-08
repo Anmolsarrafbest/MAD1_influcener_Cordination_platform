@@ -35,10 +35,18 @@
             <label for="inputCity" class="form-label">description</label>
             <input type="text" class="form-control" id="name" value="{{data.description}}" name="description">
         </div>
+        <div class="col-md-6">
+            visiblity:
+            <select name="visiblity">
+                <option>hidden</option>
+                <option>visible</option>
+            </select>
+        </div>
         <div class="col-12">
             <a href=""><button type="submit" class="btn btn-primary">cancel</button></a>
             <button type="submit" class="btn btn-primary">update</button>
-          </div>
+        </div>
+        
     </form>
     <br>
     <!-- name: {{data.name}}<br>

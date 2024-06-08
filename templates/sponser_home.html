@@ -23,9 +23,16 @@
             <a class="nav-link" href="#">Campagin</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="#">Find</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#">Stats</a>
           </li>
         </ul>
+        <form class="d-flex" id="search" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
         <div>
           <a id="Campbutton" class="btn btn-primary" href="/create_camp/{{ ans.user_id }}">Add New Campaign</a>
         </div>
@@ -56,7 +63,7 @@
         </tr>
         {% endfor %}
     </table> -->
-    <h2 id="head2"><span class="badge text-bg-secondary">Your Campaigns</span></h2>
+    <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
     
     <br>
     {% for camp in campdata %}
@@ -72,7 +79,8 @@
                 Start Date: {{camp.start_date}}<br>
                 End Date: {{camp.end_date}}<br>
                 Budget: {{camp.budget}}<br>
-                Description: {{camp.description}} <br>
+                Description: {{camp.description}}<br>
+                Visbility: {{camp.Visibility}}<br>
                 <a class="btn btn-primary" href="/update_camp_details/{{camp.campaigns_id}}">Edit</a>
                 <a class="btn btn-danger" href="/delete_campagin/{{camp.campaigns_id}}">Delete</a>
             </div>

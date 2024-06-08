@@ -250,5 +250,11 @@ def delete(campaigns_id):
     db.session.commit()
     return redirect(f"/sponserhome/{id}")
 
+@app.route("/sponserhome/campagins",methods=["GET"])
+def details():
+    data=db.session.query(campaigns).all()
+    print(data.Visibility)
+    return render_template("all_campdetails.html",data=data)
+
 if __name__=="__main__":
     app.run(debug=True)
