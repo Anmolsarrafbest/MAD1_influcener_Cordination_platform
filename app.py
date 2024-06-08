@@ -210,7 +210,8 @@ def campdet():
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
     ans=db.session.query(user).get(id)
-    campdata=db.session.query(campaigns).all()
+    campdata=db.session.query(campaigns).filter(campaigns.campaigns_id == id).all()
+    print(campdata)
     return render_template("sponser_home.html",ans=ans,campdata=campdata)
 
 @app.route("/update_camp_details/<int:campaigns_id>",methods=["GET"])
