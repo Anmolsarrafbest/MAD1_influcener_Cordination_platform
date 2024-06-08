@@ -1,7 +1,6 @@
 *{
     font-family:Tahoma, Geneva, Verdana, sans-serif;
     height: auto;
-    
 }
 
 .nav-bar{
@@ -42,4 +41,39 @@
 } */
 #intro{
     color: white;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #b6dcfe; 
+    font-size: large;
+    width: 90%;
+    margin-left: 70px;
+}
+
+.accordion-button{
+    background-color: #b6dcfe;
+    border: 1px solid black;
+    font-size: large;
+    width: 90%;
+    margin-left: 70px;
+}
+
+.accordion-body{
+    background-color: #e8f0ff;
+    color:black;
+    width: 90%;
+    margin-left: 70px;
+   
+}
+#logout{
+    margin-left: 10px;
+    text-decoration:none;
+}
+
+#Campbutton{
+    margin-right: 20px;
+}
+#head2
+{
+    margin-left: 20px;
 }

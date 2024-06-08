@@ -217,7 +217,7 @@ def sponser_login(id):
 def some1(campaigns_id):
     data=db.session.query(campaigns).get(campaigns_id)
     print(data)
-    return render_template("campdetails.html",data=data)
+    return render_template("update_campdetails.html",data=data)
 
 @app.route("/edit_campdetails/<int:campaigns_id>",methods=["GET","POST"])
 def updatecamp(campaigns_id):
@@ -241,6 +241,14 @@ def updatecamp(campaigns_id):
         data.description=description
         db.session.commit()
         return redirect(f"/sponserhome/{data.sponser_id}")
-    
+
+@app.route("/delete_campagin/<int:campaigns_id>",methods=["GET"])
+def delete(campaigns_id):
+    data=db.session.query(campaigns).get(campaigns_id)
+    id=data.sponser_id
+    db.session.delete(data)
+    db.session.commit()
+    return redirect(f"/sponserhome/{id}")
+
 if __name__=="__main__":
     app.run(debug=True)
