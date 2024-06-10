@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="POST" action="/userdetails" id = "data-form">
+    <form method="POST" action="/userdetails" id = "data-form" enctype="multipart/form-data">
         <div >
             <input type="hidden" name="username" value="{{ user1 }}" />
         </div>
@@ -32,7 +32,11 @@
             <label>followers: </label>
             <input type="placeholder" name="follows">
          </div>
-        <input type="submit" value="submit" />
+         <div class="col-md-6">
+            <label for="photo" class="form-label">Photo:</label>
+            <input type="file" class="form-control" id="photo" name="photo" required>
+        </div>
+        <input type="submit" value="submit"/>
     </form >    
 </body>
 </html>

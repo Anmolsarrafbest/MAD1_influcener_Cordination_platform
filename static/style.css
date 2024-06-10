@@ -119,7 +119,10 @@
     width: 200%;
 }
 
-
+#photos{
+    width: 200px;
+    height: 200px;
+}
 
 .msg{
     padding-left: 30px;

@@ -1,11 +1,12 @@
 from flask import Flask,render_template,request,redirect,flash
 from flask_sqlalchemy import SQLAlchemy
-import jinja2
-
+import jinja2,os
+from werkzeug.utils import secure_filename
 api=None
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.sqlite3" 
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
 db = SQLAlchemy()
 db.init_app(app)
 app.app_context().push()
@@ -28,6 +29,7 @@ class influencer(db.Model):
     Niche=db.Column(db.String)
     reach=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
+    photo_path = db.Column(db.String)
 
 class Sponsers(db.Model):
     __tablename__='sponsers'
@@ -59,6 +61,8 @@ class Ad_request(db.Model):
     requirements=db.Column(db.String)
     payment_amount=db.Column(db.String)
     status=db.Column(db.String)
+
+#basic logging
 
 @app.route("/",methods=["GET"])
 def home():
@@ -92,11 +96,26 @@ def returns():
         if ans==None or passs==None:
             return render_template("Notregistered.html")
         elif ans.username==use2 and password==passs.password:
-            user1=ans.username
-            return render_template("user.html",user1=user1)
+            id=ans.user_id
+            return redirect(f"/userlogin/{id}")
         else:
             return render_template("Notregistered.html")
-    
+
+@app.route("/userlogin/<int:id>",methods=["GET"])        
+def userlogin(id):
+    # ans=db.session.query(user).get(id)
+    user1=db.session.query(influencer).filter(influencer.user_id == id).all()
+    print(user1)
+    return render_template("user.html",user1=user1)
+
+@app.route("/sponserhome/<int:id>",methods=["GET"])
+def sponser_login(id):
+    ans=db.session.query(user).get(id)
+    campdata=db.session.query(campaigns).filter(campaigns.sponser_id == id).all()
+    return render_template("sponser_home.html",ans=ans,campdata=campdata)
+
+#register
+
 @app.route("/register",methods=["GET"])
 def getdet():
     return render_template("register.html")    
@@ -116,23 +135,7 @@ def value():
         if ans==user1:
             return render_template('usernotallowed.html',ans=ans,user1=user1)
         else:
-            
             return render_template("user_details.html",user1=user1,role=role,password=password)
-
-    
-@app.route("/login",methods=['GET'])
-def loginadmin():
-    data=db.session.query(user).all()
-    return render_template('admin.html',data=data)
-
-@app.route("/login_users",methods=["GET"])
-def loginuser():
-    det=db.session.query(user).filter(user.username==user.username)
-    return render_template('all.html',details=det)
-
-@app.route("/login_camp",methods=["GET"])
-def logincamp():
-    return render_template('allcamp.html')
 
 @app.route("/sponserdetails" ,methods=["POST"])
 def sponser_details():
@@ -147,8 +150,7 @@ def sponser_details():
     ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
     db.session.commit()
-    user_det=db.session.query(user).filter(user.username==id).first() 
-    print(user_det.user_id)  
+    user_det=db.session.query(user).filter(user.username==id).first()   
     newSpon=Sponsers(Company_name=cname,budget=paisa,industry=indus,user_id=user_det.user_id) 
     db.session.add(newSpon)
     db.session.commit()
@@ -164,20 +166,50 @@ def resolve():
     Cate=request.form['cate']
     Niche=request.form['niche']
     reach=request.form['follows']
+    photo = request.files['photo']
     nuser=user(username=user1,password=pass1,role=role1)
     db.session.add(nuser)
-    db.session.commit()    
-    info1=influencer(name=naam,Category=Cate,Niche=Niche,reach=reach)
+    if photo:
+        filename = secure_filename(photo.filename)
+        print(filename)
+        photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        photo_path = photo_path.replace('\\', '/')
+        photo.save(photo_path)
+        photo_path = filename
+    else:
+        photo_path = None
+    db.session.commit()
+    users=db.session.query(user).filter(user.username==user1).first()
+    info1=influencer(name=naam,Category=Cate,Niche=Niche,reach=reach,user_id=users.user_id,photo_path=photo_path)
     db.session.add(info1)
     db.session.commit()
-    return render_template('user.html',user1=user1)
+    id=users.user_id
+    return redirect(f"/userlogin/{id}")
+
+#admin files
+    
+@app.route("/login",methods=['GET'])
+def loginadmin():
+    data=db.session.query(user).all()
+    return render_template('admin.html',data=data)
+
+@app.route("/login_users",methods=["GET"])
+def loginuser():
+    det=db.session.query(user).filter(user.username==user.username)
+    return render_template('all.html',details=det)
+
+@app.route("/login_camp",methods=["GET"])
+def logincamp():
+    return render_template('allcamp.html')
+
+#sponser files
 
 @app.route("/create_camp/<int:user_id>")
 def start(user_id):
     user2 = db.session.query(user).get(user_id)
     iduser=user_id
 
-    return render_template("just.html",user2=user2)
+    return render_template("addcamp.html",user2=user2)
 
 @app.route("/campdetails",methods=["POST"])
 def campdet():
@@ -207,12 +239,7 @@ def campdet():
     return redirect(f"/sponserhome/{id}")
     # return render_template("sponser_home.html",ans=ans)
 
-@app.route("/sponserhome/<int:id>",methods=["GET"])
-def sponser_login(id):
-    ans=db.session.query(user).get(id)
-    campdata=db.session.query(campaigns).filter(campaigns.sponser_id == id).all()
-    print(len(campdata))
-    return render_template("sponser_home.html",ans=ans,campdata=campdata)
+
 
 @app.route("/update_camp_details/<int:campaigns_id>",methods=["GET"])
 def some1(campaigns_id):
@@ -254,7 +281,7 @@ def delete(campaigns_id):
 @app.route("/sponserhome/campagins",methods=["GET"])
 def details():
     data=db.session.query(campaigns).all()
-    print(data.Visibility)
+    
     return render_template("all_campdetails.html",data=data)
 
 if __name__=="__main__":
