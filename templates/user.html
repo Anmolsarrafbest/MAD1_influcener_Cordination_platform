@@ -28,10 +28,17 @@
             </li>
           </ul>
     </nav>
-        {{ i.photo_path }}
-  <p> <img id="photos" src="{{ url_for('static', filename='uploads/' ~ i.photo_path) }}">
-    "</p>
+    <div class="home">
+      <div>  
+          <p><img id="photos" src="{{ url_for('static', filename='uploads/' ~ i.photo_path) }}"></p>
+      </div>
+      <div>
+        <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
 
+        <h2 id="head2"><span class="badge text-bg-secondary">New Requests </span></h2>
+        
+      </div>
+  </div>
 {% endfor %}
 </body>
 </html>

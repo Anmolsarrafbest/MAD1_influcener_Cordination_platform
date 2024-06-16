@@ -127,3 +127,7 @@
 .msg{
     padding-left: 30px;
 }
+
+.home{
+    display: flex;
+}

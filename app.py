@@ -180,7 +180,12 @@ def resolve():
         photo_path = None
     db.session.commit()
     users=db.session.query(user).filter(user.username==user1).first()
-    info1=influencer(name=naam,Category=Cate,Niche=Niche,reach=reach,user_id=users.user_id,photo_path=photo_path)
+    info1=influencer(name=naam,
+                     Category=Cate,
+                     Niche=Niche,
+                     reach=reach,
+                     user_id=users.user_id,
+                     photo_path=photo_path)
     db.session.add(info1)
     db.session.commit()
     id=users.user_id
@@ -281,8 +286,23 @@ def delete(campaigns_id):
 @app.route("/sponserhome/campagins",methods=["GET"])
 def details():
     data=db.session.query(campaigns).all()
-    
     return render_template("all_campdetails.html",data=data)
+
+@app.route("/sponser_home/find",methods=["GET"])
+def homelander():
+    ans=db.session.query(user).filter(user.role=='user').all()
+    return render_template("sponser_user_find.html",ans=ans)
+
+@app.route("/sponser_home/value",methods=["POST"])
+def vought():
+    value=request.form["value"]
+    data=db.session.query(user).filter(user.username==value).first()
+    print(data)
+    if data.role=="user":
+        ans=data
+    else:
+        ans=None
+    return render_template("sponser_user_find1.html",ans=ans)
 
 if __name__=="__main__":
     app.run(debug=True)
