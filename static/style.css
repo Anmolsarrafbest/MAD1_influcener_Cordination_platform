@@ -131,3 +131,9 @@
 .home{
     display: flex;
 }
+
+#tab1{
+    width:70%;
+    margin-left: 35px;
+    margin-top: 10px;
+}

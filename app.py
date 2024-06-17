@@ -288,13 +288,14 @@ def details():
     data=db.session.query(campaigns).all()
     return render_template("all_campdetails.html",data=data)
 
-@app.route("/sponser_home/find",methods=["GET"])
-def homelander():
+@app.route("/sponser_home/find/<int:id>",methods=["GET"])
+def homelander(id):
+    print(id)
     ans=db.session.query(user).filter(user.role=='user').all()
-    return render_template("sponser_user_find.html",ans=ans)
+    return render_template("sponser_user_find.html",ans=ans,id=id)
 
-@app.route("/sponser_home/value",methods=["POST"])
-def vought():
+@app.route("/sponser_home/value/<int:id>",methods=["POST"])
+def vought(id):
     value=request.form["value"]
     data=db.session.query(user).filter(user.username==value).first()
     print(data)
@@ -302,7 +303,7 @@ def vought():
         ans=data
     else:
         ans=None
-    return render_template("sponser_user_find1.html",ans=ans)
+    return render_template("sponser_user_find1.html",ans=ans,id=id)
 
 if __name__=="__main__":
     app.run(debug=True)
