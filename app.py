@@ -290,20 +290,27 @@ def details():
 
 @app.route("/sponser_home/find/<int:id>",methods=["GET"])
 def homelander(id):
-    print(id)
+    userdata1=dict()
     ans=db.session.query(user).filter(user.role=='user').all()
-    return render_template("sponser_user_find.html",ans=ans,id=id)
+    for i in ans:
+        k=i.user_id
+        name=i.username
+        userdata=db.session.query(influencer).filter(influencer.user_id==k).first()
+        userdata1[name]=userdata.reach
+    
+    return render_template("sponser_user_find.html",userdata1=userdata1,id=id)
 
 @app.route("/sponser_home/value/<int:id>",methods=["POST"])
 def vought(id):
     value=request.form["value"]
     data=db.session.query(user).filter(user.username==value).first()
-    print(data)
+    
     if data.role=="user":
         ans=data
     else:
         ans=None
-    return render_template("sponser_user_find1.html",ans=ans,id=id)
+    comb=zip(ans)    
+    return render_template("sponser_user_find1.html",id=id,comb=comb)
 
 if __name__=="__main__":
     app.run(debug=True)

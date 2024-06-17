@@ -21,7 +21,7 @@
                 <a class="nav-link" href="#">Campagin</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/sponser_home/find">Find</a>
+                <a class="nav-link" href="/sponser_home/find/{{ id }}">Find</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Stats</a>
@@ -35,21 +35,22 @@
           </div>
         </div>
       </nav>
-       
-      
       <table class="table table-success table-striped" id="tab1">
         <thead>
           <tr>
             <th>username</th>
+            <th>Reach</th>
             <th>action</th>
           </tr>
         </thead>
         <tbody>
-          {% for i in ans %}
+          {% for user in userdata1 %}
           <tr>
-            <td colspan="2" class="table-active">{{i.username}}</td>
+            <td  class="table-active">{{user}}</td>  
+            <td  class="table-active">{{userdata1[user]}}</td>
+            <td  class="table-active">Hello</td>
           </tr>
-          {% endfor %}
+            {% endfor %}  
         </tbody>
       </table>
        
