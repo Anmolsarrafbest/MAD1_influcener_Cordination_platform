@@ -304,13 +304,14 @@ def homelander(id):
 def vought(id):
     value=request.form["value"]
     data=db.session.query(user).filter(user.username==value).first()
-    
+    userdata=db.session.query(influencer).filter(influencer.user_id==data.user_id).first()
     if data.role=="user":
         ans=data
     else:
-        ans=None
-    comb=zip(ans)    
-    return render_template("sponser_user_find1.html",id=id,comb=comb)
+        ans=None    
+    return render_template("sponser_user_find1.html",id=id,ans=ans,userdata=userdata)
+
+
 
 if __name__=="__main__":
     app.run(debug=True)
