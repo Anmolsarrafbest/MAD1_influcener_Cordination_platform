@@ -35,12 +35,15 @@
           </div>
         </div>
       </nav>
+      <div style="margin-top: 10px; margin-left: 20px;">
+        <h2><b>Search for Influencer:- <hr></h2></b>
+      </div>
       <table class="table table-success table-striped" id="tab1">
         <thead>
           <tr>
-            <th>username</th>
+            <th>Name</th>
             <th>Reach</th>
-            <th>action</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -49,10 +52,13 @@
             <td  class="table-active">{{user}}</td>  
             <td  class="table-active">{{userdata1[user][1]}}</td>
             <td  class="table-active"><a type="button" class="btn btn-warning" href="/sponser/request/{{ userdata1[user][0] }}">
-              View </a></td>
+              View </a>
+              &nbsp;
+            <a type="button" class="btn btn-success" href="/sponser/adreq_sent/{{ userdata1[user][0] }}">Request</a>
+            </td>
           </tr>
             {% endfor %}  
         </tbody>
       </table>
-</body>
+    </body>
 </html>

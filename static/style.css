@@ -169,3 +169,35 @@
     width: 200px;
     height: 200px;
 }
+
+#add_button{
+    margin-right: 20px;
+}
+
+#floatingSelect{
+    width: 20%;
+}
+
+.anmol1{
+    display: flex;
+       
+}
+
+#photos2{
+    height: 300px;
+    width: 300px;
+}
+
+.anmol2{
+    align-items: center; 
+    justify-content:space-around;
+    margin-left: 10%;
+}
+
+.det2{
+    font-size: x-large;
+    margin-left: 15%;
+    margin-right: 15%;   
+    background-color:sandybrown;
+    margin-top: 30px;
+}

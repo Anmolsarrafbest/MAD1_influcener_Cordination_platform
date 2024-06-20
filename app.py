@@ -300,7 +300,6 @@ def homelander(id):
         l.append(k)
         l.append(userdata.reach)
         userdata1[name]=l
-    
     return render_template("sponser_user_find.html",userdata1=userdata1,id=id)
 
 @app.route("/sponser_home/value/<int:id>",methods=["POST"])
@@ -316,11 +315,24 @@ def vought(id):
 
 @app.route("/sponser/request/<int:id>",methods=["GET"])
 def adreq(id):
-    data=db.session.query(influencer).filter(user.user_id==id).first()
-    print(data)
-    return render_template("ad_user.html",data=data)
-@app.route("/sponser/adreq_sent")
-def sent():
-    pass
+    print(id)
+    data=db.session.query(influencer).filter(influencer.user_id==id).first()
+    return render_template("ad_user.html",data=data,id=id)
+
+@app.route("/sponser/adreq_sent/<int:userid>",methods=["GET","POST"])
+def sent(userid):
+    l=[]
+    user_Data=db.session.query(influencer).filter(influencer.user_id==userid).first()
+    campdata=db.session.query(campaigns).all()
+    print(user_Data.name)
+    for data in campdata:
+        if data.Visibility=="visible":
+            l.append(data)
+    return render_template("add_req.html",l=l,user_Data=user_Data)
+
+@app.route("/sponser/adreq_sent",methods=["GET"])    
+def post():        
+    return render_template("add_req.html")
+
 if __name__=="__main__":
     app.run(debug=True)
