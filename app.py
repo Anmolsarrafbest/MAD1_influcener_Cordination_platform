@@ -294,9 +294,12 @@ def homelander(id):
     ans=db.session.query(user).filter(user.role=='user').all()
     for i in ans:
         k=i.user_id
+        l=[]
         name=i.username
         userdata=db.session.query(influencer).filter(influencer.user_id==k).first()
-        userdata1[name]=userdata.reach
+        l.append(k)
+        l.append(userdata.reach)
+        userdata1[name]=l
     
     return render_template("sponser_user_find.html",userdata1=userdata1,id=id)
 
@@ -311,7 +314,13 @@ def vought(id):
         ans=None    
     return render_template("sponser_user_find1.html",id=id,ans=ans,userdata=userdata)
 
-
-
+@app.route("/sponser/request/<int:id>",methods=["GET"])
+def adreq(id):
+    data=db.session.query(influencer).filter(user.user_id==id).first()
+    print(data)
+    return render_template("ad_user.html",data=data)
+@app.route("/sponser/adreq_sent")
+def sent():
+    pass
 if __name__=="__main__":
     app.run(debug=True)

@@ -104,6 +104,29 @@
     margin-right: 500px;
 }
 
+.deta{
+    margin-left: 15%;
+    margin-right: 15%;   
+    background-color: antiquewhite;
+    margin-top: 30px;
+}
+
+.m-3{
+    border: 8px solid white;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-right: 500px;
+    display: flex;
+}
+
+.imp{
+    margin-top: 25px;
+    margin-left: 10%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: x-large;
+}
 /* .col-md-6{
     width: 100%;
 } */
@@ -136,4 +159,13 @@
     width:70%;
     margin-left: 35px;
     margin-top: 10px;
+}
+.datasss{
+    display: flex;
+    justify-self: end;
+}
+.float-start{
+    display: flex;
+    width: 200px;
+    height: 200px;
 }
