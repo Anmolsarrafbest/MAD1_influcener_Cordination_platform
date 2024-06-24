@@ -38,12 +38,7 @@
       </div>
     </div>
   </nav>
-    {{usernames}} 
-    {{passwords}}
-    {{id}}
-    
     <br>
-    
     <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
     
     <br>
@@ -74,6 +69,36 @@
       {% if campdata|length == 0 %}
       <div class="msg"><h3>There is no active Campagin</h3></div>
     {% endif %}    
+    <br>
+    <h2 id="head2"><span class="badge text-bg-secondary">Active Ad Request :-</span></h2><br>
+        {% if din is not none %}
+          {% for i in din %}
+            {% if din[i][3]=="Accepted" %}
+          <div class="accordion accordion-flush" id="accordionFlushExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-heading{{ i.adreq_id }}">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree{{ i.adreq_id }}" aria-expanded="false" aria-controls="flush-collapseThree{{ i.adreq_id }}">
+                    Requested_by:- {{ i }} | payment:- ${{ din[i][0] }}
+                  </button>
+                </h2>
+                <div id="flush-collapseThree{{ i.adreq_id }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample{{ i.adreq_id }}">
+                  <div class="accordion-body">
+                    Status:- {{din[i][3]}}<br>
+                    Message:- {{din[i][1]}}<br>
+                    Terms and condition:-  {{din[i][2]}}<br><br>
+                    <br><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+          {% endif %}
+          {% if din|length == 0 %}
+          <div class="msg"><h3>There is no active add Request.</h3></div>
+        {% endif %} <br>
+
+    
   </body>
   <link rel="stylesheet" href="\static\style.css">
   </html>

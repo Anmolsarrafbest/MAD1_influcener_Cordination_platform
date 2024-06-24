@@ -19,7 +19,7 @@ class user(db.Model):
     user_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
     username=db.Column(db.String, unique=True,nullable=False)
     password=db.Column(db.String,nullable=False)
-    role=db.Column(db.String)
+    role=db.Column(db.String)   
 
 class influencer(db.Model):
     __tablename__='influcener'
@@ -30,6 +30,7 @@ class influencer(db.Model):
     reach=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
     photo_path = db.Column(db.String)
+    
 
 class Sponsers(db.Model):
     __tablename__='sponsers'
@@ -38,8 +39,8 @@ class Sponsers(db.Model):
     industry=db.Column(db.String)
     budget=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
-    campaignss=db.relationship('campaigns',backref="sponser",lazy=True)
-
+    
+    
 class campaigns(db.Model):
     __tablename__='campaign'
     campaigns_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
@@ -51,6 +52,7 @@ class campaigns(db.Model):
     budget=db.Column(db.Integer)
     Visibility=db.Column(db.String)
     goals=db.Column(db.String)
+    
 
 class Ad_request(db.Model):
     __tablename__="ad_req"
@@ -61,6 +63,8 @@ class Ad_request(db.Model):
     requirements=db.Column(db.String)
     payment_amount=db.Column(db.String)
     status=db.Column(db.String)
+    Influ_id=db.Column(db.Integer,db.ForeignKey(influencer.influencer_id))
+    
 
 #basic logging
 
@@ -104,15 +108,33 @@ def returns():
 @app.route("/userlogin/<int:id>",methods=["GET"])        
 def userlogin(id):
     # ans=db.session.query(user).get(id)
-    user1=db.session.query(influencer).filter(influencer.user_id == id).all()
-    print(user1)
-    return render_template("user.html",user1=user1)
+    user1=db.session.query(influencer).filter(influencer.user_id == id).first()
+    addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
+    desh=dict()
+    for i in addata:
+        k=i.sponsers_id
+        spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
+        desh[spons.Company_name]=i
+    print(desh)
+    return render_template("user.html",user1=user1,desh=desh)
 
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
     ans=db.session.query(user).get(id)
-    campdata=db.session.query(campaigns).filter(campaigns.sponser_id == id).all()
-    return render_template("sponser_home.html",ans=ans,campdata=campdata)
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.user_id==id).first()
+    campdata=db.session.query(campaigns).filter(campaigns.sponser_id == sponsdata.Sponsers_id).all()
+    adddata=db.session.query(Ad_request).filter(Ad_request.sponsers_id == sponsdata.Sponsers_id).all()
+    flag=True
+    
+    din=dict()
+    for i in adddata:
+        sponsdata1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
+        print(sponsdata1)
+        userdata1=db.session.query(user).filter(user.user_id==sponsdata1.user_id).first()
+        print(userdata1)
+        din[userdata1.username]=[i.payment_amount,i.messages,i.requirements,i.status,i.adreq_id]
+    print(din)    
+    return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag)
 
 #register
 
@@ -319,7 +341,7 @@ def adreq(id):
     data=db.session.query(influencer).filter(influencer.user_id==id).first()
     return render_template("ad_user.html",data=data,id=id)
 
-@app.route("/sponser/adreq_sent/<int:userid>",methods=["GET","POST"])
+@app.route("/sponser/adreq_sent/<int:userid>",methods=["GET"])
 def sent(userid):
     l=[]
     user_Data=db.session.query(influencer).filter(influencer.user_id==userid).first()
@@ -328,11 +350,35 @@ def sent(userid):
     for data in campdata:
         if data.Visibility=="visible":
             l.append(data)
+    print(l)               
     return render_template("add_req.html",l=l,user_Data=user_Data)
 
-@app.route("/sponser/adreq_sent",methods=["GET"])    
-def post():        
-    return render_template("add_req.html")
+@app.route("/sponser/adreq_sent/<int:id>",methods=["POST"])    
+def post(id):
+    camp=request.form["camp"]
+    info_name=request.form["userName"]
+    Payment=request.form["Payment"]
+    message=request.form["message"]
+    requirements=request.form["req"]
+    campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==camp).first()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==campdata.sponser_id).first()
+    print(campdata)
+    status='Pending'        
+    ad1=Ad_request(campaigns_id=camp,sponsers_id=campdata.sponser_id,
+                   requirements=requirements,
+                   messages=message,payment_amount=Payment,status=status,Influ_id=id)
+    db.session.add(ad1)
+    db.session.commit()
+    return redirect (f"/sponserhome/{sponsdata.user_id}")
+
+@app.route("/adreq/accept/<int:adreq_id>",methods=["GET"])
+def accept(adreq_id):
+    adddata=db.session.query(Ad_request).filter(Ad_request.adreq_id==adreq_id).first()
+    adddata.status="Accepted"
+    db.session.commit()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==adddata.sponsers_id).first()
+    print('done')
+    return redirect (f"/sponserhome/{sponsdata.user_id}")
 
 if __name__=="__main__":
     app.run(debug=True)
