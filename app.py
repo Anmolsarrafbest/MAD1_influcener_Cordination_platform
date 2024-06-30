@@ -136,12 +136,13 @@ def sponser_login(id):
     adddata=db.session.query(Ad_request).filter(Ad_request.sponsers_id == sponsdata.Sponsers_id).all()
     flag=True
     din=dict()
+    count=1000
     for i in adddata:
-        sponsdata1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
-        print(sponsdata1)
-        userdata1=db.session.query(user).filter(user.user_id==sponsdata1.user_id).first()
-        print(userdata1)
-        din[userdata1.username]=[i.payment_amount,i.messages,i.requirements,i.status,i.adreq_id]
+        sponsdata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
+        userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+        print(userdata)
+        din[count]=[i.payment_amount,i.messages,i.requirements,i.status,i.adreq_id,userdata.username,]
+        count+=1
     print(din)    
     return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag)
 
