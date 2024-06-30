@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </head>
 <body>
-      <nav class="navbar" style="background-color: #e3f2fd;">\
-        welcome user, {{user1.name }}
+      <nav class="navbar" style="background-color: #e3f2fd;">
+        <h4>welcome user, {{user1.name }}</h4>
         <ul class="nav justify-content-end">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Active</a>
@@ -28,34 +28,37 @@
           </ul>
       </nav>
       <div class="home">
-      <div>  
-          <p><img id="photos" src="{{ url_for('static', filename='uploads/' ~ user1.photo_path) }}"></p>
-      </div>
-      <div>
-        <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
-        
-        <h2 id="head2"><span class="badge text-bg-secondary">New Requests </span></h2>
-        {% for i in desh %}
-        <div class="accordion accordion-flush" id="accordionFlushExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="flush-heading{{ desh[i].adreq_id }}">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree{{ desh[i].adreq_id }}" aria-expanded="false" aria-controls="flush-collapseThree{{ desh[i].adreq_id }}">
-                Requested_by:- {{ i }} | payment:- ${{ desh[i].payment_amount }}
-              </button>
-            </h2>
-            <div id="flush-collapseThree{{ desh[i].adreq_id }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample{{ desh[i].adreq_id }}">
-              <div class="accordion-body">
-                Status:- <br>
-                Message:- <br>
-                Terms and condition:-  <br><br>
-                <br><br>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
+        <div class="sidebar">  
+            <p><img class="rounded" id="photos" src="{{ url_for('static', filename='uploads/' ~ user1.photo_path) }}"></p>
         </div>
-      </div>
-  </div>
-
+        <div class="main">
+          <br>
+          <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
+          <h2 id="head2"><span class="badge text-bg-secondary">New Requests </span><hr></h2>
+          <div class="home2">
+            <table class="table table-primary" id="table2">
+              <thead>
+              <tr>
+                <th>Sponser's Name</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for i in desh %}
+                {% if i[3] == "Pending"%}
+                <tr>
+                  <td>{{ i[1] }}</td>
+                  <td>${{ i[2] }}</td>
+                  <td>{{i[3]}}</td>
+                  <td><a class="btn btn-warning" href="/user/view/{{ i[4] }}">View</a></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table> 
+          </div>
+        </div>
 </body>
 </html>

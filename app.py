@@ -90,7 +90,7 @@ def returns():
         #write code for the who had already registerd
         if ans==None or passs==None:
             return render_template("Notregistered.html")
-        elif ans.username==use2 and password==passs.password:
+        elif ans.username==use2 and ans.password==password and ans.role==role:
             id=ans.user_id
             return redirect(f"/sponserhome/{id}")
             # return render_template("sponser_home.html",ans=ans)
@@ -99,7 +99,8 @@ def returns():
     else:
         if ans==None or passs==None:
             return render_template("Notregistered.html")
-        elif ans.username==use2 and password==passs.password:
+        
+        elif ans.username==use2 and ans.password==password and ans.role==role:
             id=ans.user_id
             return redirect(f"/userlogin/{id}")
         else:
@@ -109,13 +110,22 @@ def returns():
 def userlogin(id):
     # ans=db.session.query(user).get(id)
     user1=db.session.query(influencer).filter(influencer.user_id == id).first()
+    print(user1.influencer_id)
     addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
-    desh=dict()
+    print(addata)
+    desh=[]
+    count=0
     for i in addata:
         k=i.sponsers_id
         spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
-        desh[spons.Company_name]=i
-    print(desh)
+        l=[]
+        l.append(count)
+        l.append(spons.Company_name)
+        l.append(i.payment_amount)
+        l.append(i.status)
+        l.append(i.adreq_id)
+        desh.append(l)
+        count+=1
     return render_template("user.html",user1=user1,desh=desh)
 
 @app.route("/sponserhome/<int:id>",methods=["GET"])
@@ -125,7 +135,6 @@ def sponser_login(id):
     campdata=db.session.query(campaigns).filter(campaigns.sponser_id == sponsdata.Sponsers_id).all()
     adddata=db.session.query(Ad_request).filter(Ad_request.sponsers_id == sponsdata.Sponsers_id).all()
     flag=True
-    
     din=dict()
     for i in adddata:
         sponsdata1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
@@ -379,6 +388,11 @@ def accept(adreq_id):
     sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==adddata.sponsers_id).first()
     print('done')
     return redirect (f"/sponserhome/{sponsdata.user_id}")
+
+@app.route("/user/view/<int:id>",methods=["GET"])
+def deatails(id):
+    data=db.session.query(Ad_request).filter(Ad_request.adreq_id==id).first()
+    return render_template("user_sponser_det.html",data=data)
 
 if __name__=="__main__":
     app.run(debug=True)

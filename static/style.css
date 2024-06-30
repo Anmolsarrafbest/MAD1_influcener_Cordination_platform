@@ -65,6 +65,7 @@
     margin-left: 70px;
    
 }
+
 #logout{
     margin-left: 10px;
     text-decoration:none;
@@ -153,6 +154,7 @@
 
 .home{
     display: flex;
+    
 }
 
 #tab1{
@@ -186,6 +188,7 @@
 #photos2{
     height: 300px;
     width: 300px;
+    
 }
 
 .anmol2{
@@ -201,3 +204,18 @@
     background-color:sandybrown;
     margin-top: 30px;
 }
+
+.sidebar{
+    background-color: #e3f2fd;
+    width: 300px;
+    height: 100vh;
+    padding-top: 20px;
+    padding-left: 20px;
+    
+}
+
+.home2{
+    margin-left: 20px;
+    width:800px;
+}
+
