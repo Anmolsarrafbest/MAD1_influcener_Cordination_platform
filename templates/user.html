@@ -34,6 +34,30 @@
         <div class="main">
           <br>
           <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span></h2>
+          <div class="home2">
+            <table class="table table-primary" id="table2">
+              <thead>
+              <tr>
+                <th>Sponser's Name</th>
+                <th>Payment</th>
+                <th>Status</th>
+          
+              </tr>
+              </thead>
+              <tbody>
+                {% for i in desh %}
+                {% if i[3] == "Accepted"%}
+                <tr>
+                  <td>{{ i[1] }}</td>
+                  <td>${{ i[2] }}</td>
+                  <td>{{i[3]}}</td>
+                  
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table> 
+          </div>
           <h2 id="head2"><span class="badge text-bg-secondary">New Requests </span><hr></h2>
           <div class="home2">
             <table class="table table-primary" id="table2">
@@ -52,7 +76,7 @@
                   <td>{{ i[1] }}</td>
                   <td>${{ i[2] }}</td>
                   <td>{{i[3]}}</td>
-                  <td><a class="btn btn-warning" href="/user/view/{{ i[4] }}">View</a></td>
+                  <td><a class="btn btn-warning" href="/user/view/{{ i[4] }}/{{i[1]}}/{{i[2]}}">View</a></td>
                 </tr>
                 {% endif %}
                 {% endfor %}

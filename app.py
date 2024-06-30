@@ -110,7 +110,7 @@ def returns():
 def userlogin(id):
     # ans=db.session.query(user).get(id)
     user1=db.session.query(influencer).filter(influencer.user_id == id).first()
-    print(user1.influencer_id)
+    
     addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
     print(addata)
     desh=[]
@@ -389,10 +389,47 @@ def accept(adreq_id):
     print('done')
     return redirect (f"/sponserhome/{sponsdata.user_id}")
 
-@app.route("/user/view/<int:id>",methods=["GET"])
-def deatails(id):
+@app.route("/user/view/<int:id>/<cname>/<int:money>",methods=["GET"])
+def deatails(id,cname,money):
     data=db.session.query(Ad_request).filter(Ad_request.adreq_id==id).first()
-    return render_template("user_sponser_det.html",data=data)
+    return render_template("user_sponser_det.html",data=data,cname=cname,money=money,id=id)
+
+@app.route("/view/user/reject/<int:id>",methods=["GET"])
+def reject(id):
+    addata=db.session.query(Ad_request).filter(Ad_request.adreq_id==id).first()
+    sponsdata=db.session.query(influencer).filter(influencer.influencer_id==addata.Influ_id).first()
+    userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+    print(userdata.username)
+    addata.status="Rejected"
+    db.session.commit()
+    return redirect (f"/userlogin/{userdata.user_id}")
+
+@app.route("/view/user/modify/<int:id>",methods=["GET","POST"])
+def deliver(id):
+    if request.method=="GET":
+        addata=db.session.query(Ad_request).filter(Ad_request.adreq_id==id).first()
+        sponsdata=db.session.query(influencer).filter(influencer.influencer_id==addata.Influ_id).first()
+        userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+        return render_template("adreq_modify.html",addata=addata)
+    elif request.method=="POST":
+        addata=db.session.query(Ad_request).filter(Ad_request.adreq_id==id).first()
+        addata.payment_amount=request.form["Money"]
+        addata.messages=request.form["message"]
+        addata.requirements=request.form["req"]
+        addata.status="Modified"
+        db.session.commit()
+        sponsdata=db.session.query(influencer).filter(influencer.influencer_id==addata.Influ_id).first()
+        userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+        return redirect (f"/userlogin/{userdata.user_id}")
+
+@app.route("/view/user/Accept/<int:ad_id>",methods=["GET"])
+def accepted(ad_id):
+    add=db.session.query(Ad_request).filter(Ad_request.adreq_id==ad_id).first()
+    sponsdata=db.session.query(influencer).filter(influencer.influencer_id==add.Influ_id).first()
+    userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+    add.status="Accepted"
+    db.session.commit()
+    return redirect (f"/userlogin/{userdata.user_id}")
 
 if __name__=="__main__":
     app.run(debug=True)

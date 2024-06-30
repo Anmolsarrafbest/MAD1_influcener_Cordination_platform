@@ -11,13 +11,13 @@
 </head>
 <body class="deta">
     <div class="m-3" style="font-size: larger;">
-            Message: {{data.messages}}<br><br>
+            sent_by = {{cname}}<br>
+            money = ${{money}}<br>
+            Message: {{data.messages}}<br>
             Terms and condtions: {{data.requirements}}<br>
-        
-            <a class="btn btn-danger">Reject</a>
-            <a class="btn btn-warning">Modify</a>
-            <a class="btn btn-success">Accept</a>
-          
     </div>
+    <a class="btn btn-danger" href="/view/user/reject/{{id}}">Reject</a> &nbsp;
+    <a class="btn btn-warning" href="/view/user/modify/{{id}}">Modify</a> &nbsp;
+    <a class="btn btn-success" href="/view/user/Accept/{{id}}">Accept</a>
 </body>
 </html>
