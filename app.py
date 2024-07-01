@@ -138,13 +138,13 @@ def sponser_login(id):
     din=dict()
     count=1000
     for i in adddata:
-        sponsdata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
-        userdata=db.session.query(user).filter(user.user_id==sponsdata.user_id).first()
+        sponsdata1=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
+        userdata=db.session.query(user).filter(user.user_id==sponsdata1.user_id).first()
         print(userdata)
         din[count]=[i.payment_amount,i.messages,i.requirements,i.status,i.adreq_id,userdata.username,]
         count+=1
     print(din)    
-    return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag)
+    return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag,sponsdata=sponsdata.Sponsers_id)
 
 #register
 
@@ -298,6 +298,7 @@ def updatecamp(campaigns_id):
         end_date=request.form["edate"]
         budget=request.form["budget"]
         description=request.form["description"]
+        data.Visibility=request.form["visiblity"]
         data.name=name
         data.goals=goals
         data.start_date=start_date
@@ -344,6 +345,34 @@ def vought(id):
     else:
         ans=None    
     return render_template("sponser_user_find1.html",id=id,ans=ans,userdata=userdata)
+
+#find campagins as sponsers
+
+@app.route("/sponser_home/Campagin/<int:id>",methods=["GET","POST"])
+def find_camp(id):
+    if request.method=="GET":
+        campdata=db.session.query(campaigns).all()
+        count=1
+        l=dict()
+        for i in campdata:
+            if i.Visibility!="hidden":
+                l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
+                count+=1
+        print(l)        
+        return render_template("camp_find.html",l=l,id=id)
+    elif request.method=="POST":
+        Campagin_name=request.form["Campagin_name"]
+        i=db.session.query(campaigns).filter(campaigns.name==Campagin_name).first()
+        count=0
+        l=dict()
+        if i is None:
+            l=None
+            return render_template("camp_find.html",l=l,id=id)
+        if i.Visibility!="hidden":
+            l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
+        else:
+            l=None    
+        return render_template("camp_find.html",l=l,id=id)
 
 @app.route("/sponser/request/<int:id>",methods=["GET"])
 def adreq(id):
@@ -431,6 +460,41 @@ def accepted(ad_id):
     add.status="Accepted"
     db.session.commit()
     return redirect (f"/userlogin/{userdata.user_id}")
+
+@app.route("/view/Sponser/reject/<int:id>",methods=["GET"])
+def rejct_spons(ad_id):
+    add=db.session.query(Ad_request).filter(Ad_request.adreq_id==ad_id).first()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==add.sponsers_id).first()
+    add.status="Rejected"
+    db.session.commit()
+    return redirect (f"/sponserhome/{sponsdata.user_id}")
+
+@app.route("/view/Sponser/Accept/<ad_id>",methods=["GET"])
+def accept_spons(ad_id):
+    add=db.session.query(Ad_request).filter(Ad_request.adreq_id==ad_id).first()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==add.sponsers_id).first()
+    add.status="Accepted"
+    db.session.commit()
+    return redirect (f"/sponserhome/{sponsdata.user_id}")
+
+@app.route("/view/Sponser/cancel/<ad_id>",methods=["GET"])
+def cancel_req(ad_id):
+    add=db.session.query(Ad_request).filter(Ad_request.adreq_id==ad_id).first()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==add.sponsers_id).first()
+    db.session.delete(add)
+    db.session.commit()
+    return redirect (f"/sponserhome/{sponsdata.user_id}") 
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__=="__main__":
     app.run(debug=True)

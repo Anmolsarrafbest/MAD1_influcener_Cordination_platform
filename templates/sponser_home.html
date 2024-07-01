@@ -18,7 +18,7 @@
             <a class="nav-link active" aria-current="page" href="/sponserhome/{{ ans.user_id }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Campagin</a>
+            <a class="nav-link" href="/sponser_home/Campagin/{{sponsdata}}">Campagin</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/sponser_home/find/{{ ans.user_id }}">Find</a>
@@ -39,7 +39,7 @@
     </div>
   </nav>
     <br>
-    <h2 id="head2"><span class="badge text-bg-secondary">Active Campaigns</span><hr></h2>
+    <h2 id="head2" ><span class="badge text-bg-success">Active Campaigns</span><hr></h2>
     {% if campdata is not none %}
       {% for camp in campdata %}
       <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -55,7 +55,7 @@
                   End Date: {{camp.end_date}}<br>
                   Budget: {{camp.budget}}<br>
                   Description: {{camp.description}}<br>
-                  Visbility: {{camp.Visibility}}<br><br>
+                  Visbility: {{camp.Visibility}}<br>
                   <a class="btn btn-primary" href="/update_camp_details/{{camp.campaigns_id}}">Update</a>
                   <a class="btn btn-danger" id="upds" href="/delete_campagin/{{camp.campaigns_id}}">Delete</a>
               </div>
@@ -67,7 +67,7 @@
       {% if campdata|length == 0 %}
       <div class="msg"><h3>There is no active Campagin</h3></div>
     {% endif %}    <br>
-    <h2 id="head2"><span class="badge text-bg-secondary">Active Ad Request :-</span><hr></h2>
+    <h2 id="head2"><span class="badge text-bg-success">Active Ad Request :-</span><hr></h2>
         {% if din is not none %}
           {% for i in din %}
             {% if din[i][3]=="Accepted" %}
@@ -90,11 +90,53 @@
             </div>
             {% endif %}
           {% endfor %}
-          {% endif %}
-          {% if din|length == 0 %}
-          <div class="msg"><h3>There is no active add Request.</h3></div>
-        {% endif %} <br>
-      <h2 id="head2"><span class="badge text-bg-secondary">Modified add-request </span><hr></h2>
+          {% set modified_requests = [] %}
+          {% for i in din %}
+            {% if din[i][3] == "Accepted" %}
+              {% set modified_requests = modified_requests.append(din[i]) %}
+            {% endif %}
+          {% endfor %}
+          {% if modified_requests == [] %}
+          <h4 style="margin-left: 30px;">No new request</h4>
+          {% endif %}  
+          {% endif %}<br>
+    <h2 id="head2"><span class="badge text-bg-warning">Pending Ad-request:-</span><hr></h2>
+    {% if din is not none %}
+    {% for i in din %}
+      {% if din[i][3]=="Pending" %}
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="flush-heading{{ i }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree{{ i }}" aria-expanded="false" aria-controls="flush-collapseThree{{ i}}">
+              Requested_to:- {{ din[i][5] }} | payment:- ${{ din[i][0] }}
+            </button>
+          </h2>
+          <div id="flush-collapseThree{{ i }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample{{ i }}">
+            <div class="accordion-body">
+              Status:- {{din[i][3]}}<br>
+              Message:- {{din[i][1]}}<br>
+              Terms and condition:-  {{din[i][2]}}<br><br>
+              <a class="btn btn-danger" href="/view/Sponser/cancel/{{din[i][4]}}">Cancel</a>
+              <br><br>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+    {% set modified_requests = [] %}
+    {% for i in din %}
+      {% if din[i][3] == "Pending" %}
+        {% set modified_requests = modified_requests.append(din[i]) %}
+      {% endif %}
+    {% endfor %}
+    {% if modified_requests == [] %}
+    <h4 style="margin-left: 30px;">No Pending Add -request</h4>
+    {% endif %}  
+    {% endif %}<br>
+    
+          
+      <h2 id="head2"><span class="badge text-bg-warning">Modified ad-request </span><hr></h2>
       {% if din is not none %}
           {% for i in din %}
             {% if din[i][3]=="Modified" %}
@@ -109,19 +151,26 @@
                   <div class="accordion-body">
                     Status:- {{din[i][3]}}<br>
                     Message:- {{din[i][1]}}<br>
-                    Terms and condition:-  {{din[i][2]}}<br><br>
-                    <br><br>
+                    Terms and condition:-  {{din[i][2]}}<br>
+                    <a class="btn btn-danger" href="/view/user/reject/{{din[i][4]}}">Reject</a> &nbsp;
+                    <a class="btn btn-success" href="/view/user/Accept/{{din[i][4]}}">Accept</a>
                   </div>
                 </div>
               </div>
             </div>
             {% endif %}
           {% endfor %}
-          {% endif %}
-          {% if din|length == 0 %}
-          <div class="msg"><h3>There is no active add Request.</h3></div>
-          {% endif %}<br>
-      <h2 id="head2"><span class="badge text-bg-secondary">Rejected add-request</span><hr></h2>
+          {% set modified_requests = [] %}
+          {% for i in din %}
+            {% if din[i][3] == "Modified" %}
+              {% set modified_requests = modified_requests.append(din[i]) %}
+            {% endif %}
+          {% endfor %}
+          {% if modified_requests == [] %}
+          <h4 style="margin-left: 30px;">No new request</h4>
+          {% endif %}  
+      {% endif %}
+      <h2 id="head2"><span class="badge text-bg-danger">Rejected ad-request</span><hr></h2>
       {% if din is not none %}
       {% for i in din %}
         {% if din[i][3]=="Rejected" %}
