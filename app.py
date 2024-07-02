@@ -86,7 +86,6 @@ def returns():
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
-        
         #write code for the who had already registerd
         if ans==None or passs==None:
             return render_template("Notregistered.html")
@@ -109,24 +108,27 @@ def returns():
 @app.route("/userlogin/<int:id>",methods=["GET"])        
 def userlogin(id):
     # ans=db.session.query(user).get(id)
-    user1=db.session.query(influencer).filter(influencer.user_id == id).first()
-    
+    user1=db.session.query(influencer).filter(influencer.user_id == id).first() 
     addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
     print(addata)
     desh=[]
     count=0
+    Money=0
     for i in addata:
         k=i.sponsers_id
         spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
+        ifudata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
         l=[]
         l.append(count)
         l.append(spons.Company_name)
         l.append(i.payment_amount)
+        Money+=int(i.payment_amount)
+        print(Money)
         l.append(i.status)
         l.append(i.adreq_id)
         desh.append(l)
         count+=1
-    return render_template("user.html",user1=user1,desh=desh)
+    return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
 
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
@@ -485,9 +487,30 @@ def cancel_req(ad_id):
     db.session.commit()
     return redirect (f"/sponserhome/{sponsdata.user_id}") 
 
-
-
-
+@app.route("/userdetails/update/<infl_id>",methods=["GET","POST"])
+def user_update(infl_id):
+    if request.method=="GET":
+        data=db.session.query(influencer).filter(influencer.influencer_id==infl_id).first()
+        
+        return render_template("update_profile.html",data=data,infl_id=infl_id)
+    elif request.method=="POST":
+        data=db.session.query(influencer).filter(influencer.influencer_id==infl_id).first()
+        data.name=request.form["vname"]
+        data.Niche=request.form["niche"]
+        data.Category=request.form["cate"]
+        photo=request.files["photo"]
+        if photo:
+            filename = secure_filename(photo.filename)
+            print(filename)
+            photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            photo_path = photo_path.replace('\\', '/')
+            photo.save(photo_path)
+            photo_path = filename
+            data.photo_path=photo_path
+        else:
+            photo_path = None
+        db.session.commit()
+        return redirect(f"/userdetails/update/{infl_id}")
 
 
 

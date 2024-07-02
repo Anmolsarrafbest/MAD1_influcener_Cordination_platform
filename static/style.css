@@ -219,3 +219,12 @@
     width:800px;
 }
 
+.money_note{
+    font-family: sans-serif;
+    text-align: center;
+    margin-right: 60px;
+    font-size: larger;
+    background-color: green; 
+    border: 2px solid transparent;
+    color: white;
+}
