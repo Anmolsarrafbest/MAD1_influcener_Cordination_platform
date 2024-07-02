@@ -39,7 +39,7 @@
     </div>
   </nav>
     <br>
-    <h2 id="head2" ><span class="badge text-bg-success">Active Campaigns</span><hr></h2>
+    <h2 id="head2" ><span class="badge text-bg-success">Active Campaigns</span><h6 style="margin-left: 20px;">(Deleting any campagin will also delete ad request related to it)</h6><hr></h2>
     {% if campdata is not none %}
       {% for camp in campdata %}
       <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -152,8 +152,8 @@
                     Status:- {{din[i][3]}}<br>
                     Message:- {{din[i][1]}}<br>
                     Terms and condition:-  {{din[i][2]}}<br>
-                    <a class="btn btn-danger" href="/view/user/reject/{{din[i][4]}}">Reject</a> &nbsp;
-                    <a class="btn btn-success" href="/view/user/Accept/{{din[i][4]}}">Accept</a>
+                    <a class="btn btn-danger" href="/view/Sponser/reject/{{din[i][4]}}">Reject</a> &nbsp;
+                    <a class="btn btn-success" href="/view/Sponser/Accept/{{din[i][4]}}">Accept</a>
                   </div>
                 </div>
               </div>
@@ -193,9 +193,15 @@
         </div>
         {% endif %}
       {% endfor %}
-      {% endif %}
-      {% if din|length == 0 %}
-      <div class="msg"><h3>There is no active add Request.</h3></div>
+      {% set modified_requests = [] %}
+          {% for i in din %}
+            {% if din[i][3] == "Rejected" %}
+              {% set modified_requests = modified_requests.append(din[i]) %}
+            {% endif %}
+          {% endfor %}
+          {% if modified_requests == [] %}
+          <h4 style="margin-left: 30px;">Nothing to show </h4>
+          {% endif %}  
       {% endif %}
   </body>
   <link rel="stylesheet" href="\static\style.css">

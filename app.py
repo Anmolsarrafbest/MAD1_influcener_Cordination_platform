@@ -116,6 +116,7 @@ def userlogin(id):
     Money=0
     for i in addata:
         k=i.sponsers_id
+        campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
         spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
         ifudata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
         l=[]
@@ -123,9 +124,10 @@ def userlogin(id):
         l.append(spons.Company_name)
         l.append(i.payment_amount)
         Money+=int(i.payment_amount)
-        print(Money)
+        print(campdata.name)
         l.append(i.status)
         l.append(i.adreq_id)
+        l.append(campdata.name)
         desh.append(l)
         count+=1
     return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
@@ -313,7 +315,9 @@ def updatecamp(campaigns_id):
 @app.route("/delete_campagin/<int:campaigns_id>",methods=["GET"])
 def delete(campaigns_id):
     data=db.session.query(campaigns).get(campaigns_id)
+    adddata=db.session.query(Ad_request).filter(Ad_request.campaigns_id==campaigns_id).all()
     id=data.sponser_id
+    db.session.delete(adddata)
     db.session.delete(data)
     db.session.commit()
     return redirect(f"/sponserhome/{id}")
@@ -498,6 +502,7 @@ def user_update(infl_id):
         data.name=request.form["vname"]
         data.Niche=request.form["niche"]
         data.Category=request.form["cate"]
+        data.reach=request.form["follows"]
         photo=request.files["photo"]
         if photo:
             filename = secure_filename(photo.filename)
@@ -510,7 +515,8 @@ def user_update(infl_id):
         else:
             photo_path = None
         db.session.commit()
-        return redirect(f"/userdetails/update/{infl_id}")
+        return redirect(f"/userlogin/{data.user_id}")
+
 
 
 
