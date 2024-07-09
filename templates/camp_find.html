@@ -18,7 +18,7 @@
               <a class="nav-link active" aria-current="page" href="/userdetails/update/{{id}}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">Find</a>
+              <a class="nav-link" href="/userlogin/{{user_id}}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/user_home/Campagin/{{id}}">Campagin</a>
@@ -32,6 +32,7 @@
       </nav>
       <div class="home_camp">
         <div class="sidebar2">
+          <h4>Search option:-<hr></h4><br>
           <form class="row g-3" method="POST" action="/user_home/Campagin/{{id}}">
             <div class="col-12">
               <label for="inputAddress" class="form-label">Name</label>
@@ -48,7 +49,7 @@
         </div>  
         <div>
           <h2><b style="margin-left: 20px;">Search for Campaigns:- <hr style="margin-left: 20px;"></h2></b>
-          <table class="table table-success table-striped" id="tab1">
+          <table class="table table-success table-striped" id="tab2">
             <thead>
                 {% if l is not none %}    
               <tr>
