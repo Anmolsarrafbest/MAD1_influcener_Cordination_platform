@@ -107,7 +107,12 @@ def returns():
 
 @app.route("/userlogin/<int:id>",methods=["GET"])        
 def userlogin(id):
-    # ans=db.session.query(user).get(id)
+    
+    # Change the search method for campagins in user section like adding a side bar for filter section
+
+
+
+
     user1=db.session.query(influencer).filter(influencer.user_id == id).first() 
     addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
     print(addata)
@@ -354,7 +359,7 @@ def vought(id):
 
 #find campagins as sponsers
 
-@app.route("/sponser_home/Campagin/<int:id>",methods=["GET","POST"])
+@app.route("/user_home/Campagin/<int:id>",methods=["GET","POST"])
 def find_camp(id):
     if request.method=="GET":
         campdata=db.session.query(campaigns).all()
@@ -367,18 +372,59 @@ def find_camp(id):
         print(l)        
         return render_template("camp_find.html",l=l,id=id)
     elif request.method=="POST":
-        Campagin_name=request.form["Campagin_name"]
-        i=db.session.query(campaigns).filter(campaigns.name==Campagin_name).first()
-        count=0
-        l=dict()
-        if i is None:
-            l=None
+        name=request.form["name"]
+        budget=request.form["budget"]
+        print(budget)
+        
+        if len(name)==0:
+            name=None
+        print(name==None)    
+        try:
+            budget=int(budget)
+        except ValueError:
+            budget=None
+        print(budget)
+        if  budget==None and name==None:
+            i=db.session.query(campaigns).filter(campaigns.name==name).first()
+            count=1
+            l=dict()
+            if i is None:
+                l=None
+                return render_template("camp_find.html",l=l,id=id)
+            if i.Visibility!="hidden":
+                l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
+            else:
+                l=None    
             return render_template("camp_find.html",l=l,id=id)
-        if i.Visibility!="hidden":
-            l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
-        else:
-            l=None    
-        return render_template("camp_find.html",l=l,id=id)
+        elif name==None:
+            campdata1=db.session.query(campaigns).filter(campaigns.budget==budget).all()
+            count=1
+            l=dict()
+            for i in campdata1:
+                print(i)
+                if i is None:
+                    l=None
+                    return render_template("camp_find.html",l=l,id=id)
+                if i.Visibility!="hidden" and i.budget==int(budget):
+                    l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
+                    count+=1
+                else:
+                    l=None    
+            return render_template("camp_find.html",l=l,id=id)
+        elif (budget==None):
+            campdata2=db.session.query(campaigns).filter(campaigns.name==name).all()
+            count=1
+            l=dict()
+            for i in campdata2:
+                if i is None:
+                    l=None
+                    return render_template("camp_find.html",l=l,id=id)
+                if i.Visibility!="hidden":
+                    l[count]=[i.name,i.start_date,i.end_date,i.campaigns_id]
+                    count+=1
+                else:
+                    l=None    
+            return render_template("camp_find.html",l=l,id=id)
 
 @app.route("/sponser/request/<int:id>",methods=["GET"])
 def adreq(id):
@@ -391,7 +437,6 @@ def sent(userid):
     l=[]
     user_Data=db.session.query(influencer).filter(influencer.user_id==userid).first()
     campdata=db.session.query(campaigns).all()
-    print(user_Data.name)
     for data in campdata:
         if data.Visibility=="visible":
             l.append(data)

@@ -10,63 +10,75 @@
     <link rel="stylesheet" href="\static\style.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" id="navbar">
-        <div class="container-fluid">
-          <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/sponserhome/{{ id }}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/sponser_home/Campagin/{{id}}">Campagin</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/sponser_home/find/{{ id }}">Find</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Stats</a>
-              </li>
-            </ul>
-            <form class="d-flex" id="search" method="POST" action="/sponser_home/Campagin/{{ id }}">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="Campagin_name">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <a id="logout" href="/">Logout</a>
+     <nav class="navbar" style="background-color: #e3f2fd;">
+        <h4>&nbsp;welcome</h4>
+        
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/userdetails/update/{{id}}">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Find</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/user_home/Campagin/{{id}}">Campagin</a>
+            </li>
+            <li>
+              <a class="nav-link" href="/">logout</a>
+            </li>
+          </ul>
           </div>
         </div>
       </nav>
-      <div style="margin-top: 10px; margin-left: 20px;">
-        <h2><b>Search for Campaigns:- <hr></h2></b>
-      </div>
-      <table class="table table-success table-striped" id="tab1">
-        <thead>
-            {% if l is not none %}    
-          <tr>
-            <th>S.no</th>
-            <th>Name</th>
-            <th>Start-date</th>
-            <th>End-date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-            
-            {% for i in l %}
-          <tr>
-            <td class="table-active">{{i}}</td>
-            <td class="table-active">{{l[i][0]}}</td>  
-            <td class="table-active">{{l[i][1]}}</td>
-            <td class="table-active">{{l[i][2]}}</td>
-            <td  class="table-active">
-            <a type="button" class="btn btn-primary" href="/sponser/adreq_sent/{{ l[i][3] }}">Request</a>
-            </td>
-          </tr>
-            {% endfor %} 
-          {% else %}
-          <h4 style="margin-left: 25px;">No campagins found</h4><br>
-          <h5 style="margin-left: 25px; color: red;">Please check the name and try again. </h5>
-          {% endif %}   
-        </tbody>
-      </table>
+      <div class="home_camp">
+        <div class="sidebar2">
+          <form class="row g-3" method="POST" action="/user_home/Campagin/{{id}}">
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Name</label>
+              <input type="text" class="form-control" id="inputAddress" name="name">
+            </div>
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Budget</label>
+              <input type="text" class="form-control" id="inputAddress" name="budget">
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-outline-success">search</button>
+          </div>
+          </form>
+        </div>  
+        <div>
+          <h2><b style="margin-left: 20px;">Search for Campaigns:- <hr style="margin-left: 20px;"></h2></b>
+          <table class="table table-success table-striped" id="tab1">
+            <thead>
+                {% if l is not none %}    
+              <tr>
+                <th>S.no</th>
+                <th>Name</th>
+                <th>Start-date</th>
+                <th>End-date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+                {% for i in l %}
+              <tr>
+                <td class="table-active">{{i}}</td>
+                <td class="table-active">{{l[i][0]}}</td>  
+                <td class="table-active">{{l[i][1]}}</td>
+                <td class="table-active">{{l[i][2]}}</td>
+                <td  class="table-active">
+                <a type="button" class="btn btn-primary" href="/sponser/adreq_sent/{{ l[i][3] }}">Request</a>
+                </td>
+              </tr>
+                {% endfor %} 
+              {% else %}
+              <h4 style="margin-left: 25px;">No campagins found</h4><br>
+              <h5 style="margin-left: 25px; color: red;">Please check the name and try again. </h5>
+              {% endif %}   
+            </tbody>
+          </table>
+        </div>
+      </div>  
     </body>
 </html>
