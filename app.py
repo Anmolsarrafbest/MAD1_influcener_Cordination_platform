@@ -13,13 +13,15 @@ app.app_context().push()
 app.secret_key = '123456789Anmol'
 
 # defining models
+Active=0
 
 class user(db.Model):
     __tablename__='user'
     user_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
     username=db.Column(db.String, unique=True,nullable=False)
     password=db.Column(db.String,nullable=False)
-    role=db.Column(db.String)   
+    role=db.Column(db.String) 
+    flagged_user=db.Column(db.Boolean, default=False)  
 
 class influencer(db.Model):
     __tablename__='influcener'
@@ -30,7 +32,7 @@ class influencer(db.Model):
     reach=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
     photo_path = db.Column(db.String)
-    
+    flagged_info=db.Column(db.Boolean, default=False)
 
 class Sponsers(db.Model):
     __tablename__='sponsers'
@@ -39,7 +41,7 @@ class Sponsers(db.Model):
     industry=db.Column(db.String)
     budget=db.Column(db.Integer)
     user_id=db.Column(db.Integer,db.ForeignKey(user.user_id))
-    
+    flagged_spons=db.Column(db.Boolean, default=False)
     
 class campaigns(db.Model):
     __tablename__='campaign'
@@ -52,7 +54,7 @@ class campaigns(db.Model):
     budget=db.Column(db.Integer)
     Visibility=db.Column(db.String)
     goals=db.Column(db.String)
-    
+    flagged_camp=db.Column(db.Boolean, default=False)
 
 class Ad_request(db.Model):
     __tablename__="ad_req"
@@ -64,10 +66,14 @@ class Ad_request(db.Model):
     payment_amount=db.Column(db.String)
     status=db.Column(db.String)
     Influ_id=db.Column(db.Integer,db.ForeignKey(influencer.influencer_id))
-    
+    flagged_ad_reqd=db.Column(db.Boolean, default=False)
 
 #basic logging
-
+def countsss(x):
+    count=0
+    for i in x:
+        count+=1
+    return count    
 @app.route("/",methods=["GET"])
 def home():
     return render_template("logging.html")
@@ -82,7 +88,21 @@ def returns():
     if role =="Admin":
         if use2=="admin_anmol" and password=="2024":
             data=db.session.query(user).all()
-            return render_template('admin.html',data=data)
+            campdata=db.session.query(campaigns).all()
+            infudata=db.session.query(influencer).all()
+            addata=db.session.query(Ad_request).all()
+            spon_data=db.session.query(Sponsers).all()
+            
+            user_count=countsss(data)
+            camp_count=countsss(campdata)
+            infu_count=countsss(infudata)
+            adcount=countsss(addata)
+            spons_count=countsss(spon_data)
+            # for i in data:
+            #     user_count+=1
+            return render_template('admin.html',
+                                   data=data,
+                                   user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
@@ -98,7 +118,6 @@ def returns():
     else:
         if ans==None or passs==None:
             return render_template("Notregistered.html")
-        
         elif ans.username==use2 and ans.password==password and ans.role==role:
             id=ans.user_id
             return redirect(f"/userlogin/{id}")
@@ -109,28 +128,31 @@ def returns():
 def userlogin(id):
     user1=db.session.query(influencer).filter(influencer.user_id == id).first() 
     addata=db.session.query(Ad_request).filter(Ad_request.Influ_id==user1.influencer_id).all()
-    print(addata)
+    print(addata==[])
     desh=[]
     count=0
     Money=0
-    for i in addata:
-        k=i.sponsers_id
-        campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
-        spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
-        ifudata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
-        l=[]
-        l.append(count)
-        l.append(spons.Company_name)
-        l.append(i.payment_amount)
-        Money+=int(i.payment_amount)
-        print(campdata.name)
-        l.append(i.status)
-        l.append(i.adreq_id)
-        l.append(campdata.name)
-        desh.append(l)
-        count+=1
-    return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
-
+    if addata != []:
+        for i in addata:
+            k=i.sponsers_id
+            campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
+            spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
+            ifudata=db.session.query(influencer).filter(influencer.influencer_id==i.Influ_id).first()
+            print(ifudata)
+            l=[]
+            l.append(count)
+            l.append(spons.Company_name)
+            l.append(i.payment_amount)
+            Money+=int(i.payment_amount)
+            print(campdata.name)
+            l.append(i.status)
+            l.append(i.adreq_id)
+            l.append(campdata.name)
+            desh.append(l)
+            count+=1
+        return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
+    else:
+        return render_template("user.html",user1=user1,desh=desh,Money=Money)
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
     ans=db.session.query(user).get(id)
@@ -224,24 +246,46 @@ def resolve():
     db.session.add(info1)
     db.session.commit()
     id=users.user_id
-    return redirect(f"/userlogin/{id}")
+    flash('You have been successfully registered! please logg in ')    
+    return render_template("logging.html")
 
 #admin files
     
 @app.route("/login",methods=['GET'])
 def loginadmin():
+    
     data=db.session.query(user).all()
-    return render_template('admin.html',data=data)
+    campdata=db.session.query(campaigns).all()
+    infudata=db.session.query(influencer).all()
+    addata=db.session.query(Ad_request).all()
+    spon_data=db.session.query(Sponsers).all()
+    user_count=countsss(data)
+    camp_count=countsss(campdata)
+    infu_count=countsss(infudata)
+    adcount=countsss(addata)
+    spons_count=countsss(spon_data)
+    # for i in data:
+    #     user_count+=1
+    return render_template('admin.html',
+                            data=data,
+                            user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
 
 @app.route("/login_users",methods=["GET"])
 def loginuser():
-    det=db.session.query(user).filter(user.username==user.username)
-    return render_template('all.html',details=det)
+    det=db.session.query(user).filter(user.username==user.username).all()
+    return render_template('admin_user.html',details=det)
 
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
-    return render_template('allcamp.html')
+    campdata=db.session.query(campaigns).all()
+    campdata_need=None
+    return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
 
+@app.route("/admin_camp/<int:camp_id>",methods=["GET"])
+def admin_camp(camp_id):
+    campdata=db.session.query(campaigns).all()
+    campdata_need=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+    return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
 #sponser files
 
 @app.route("/create_camp/<int:user_id>")
