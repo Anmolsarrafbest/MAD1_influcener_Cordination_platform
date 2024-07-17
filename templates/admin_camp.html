@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 </head>
-<body>
+<body style="background-color: lightgray;">
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="/login">Home</a>
@@ -22,7 +22,10 @@
       <a class="nav-link active" aria-current="page" href="/login_camp" >Campaign</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="" >Sponsers</a>
+      <a class="nav-link active" aria-current="page" href="/admin_spons" >Sponsers</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/admin_info" >influencers</a>
     </li>
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="" >Flagged_Campaign</a>
@@ -34,29 +37,39 @@
       <a class="nav-link active" aria-current="page" href="" >Flagged_influencer</a>
     </li>
   </ul>
+  &nbsp;
   <div class="seperate">
     <div style="width: 50%; margin-left: 20px;">
-        Here, you will find all details of campaigns.<br>
+        <h4>Here, you will find all details of campaigns.</h4><br>
         <table class="table table-hover">
-          <th>
-            <td>Name</td>
-            <td>Action</td>
-          </th>
+          <tr>
+            <th>Name</th>
+            <th>Action</th>
+            <th>Flagged</th>
+            <th>Mark</th>
+          </tr>
             {% for i in campdata %}
           <tr>
-            <td></td><br>
-            <td>{{i.name}}</td><br>
-
+            <td>{{i.name}}</td>
             <td><a href="/admin_camp/{{i.campaigns_id}}">view</a></td>
+            <td>{{i.flagged_camp}}</td>
+            {% if i.flagged_camp == false %}
+            <td><a class="btn btn-danger" href="/admin_camp_flag/{{i.campaigns_id}}">mark it</a></td>
+            {% else %}
+            <td><a class="btn btn-success" href="/admin_camp_flag_true/{{i.campaigns_id}}">unmark it</a></td>
+            {% endif %}
           </tr>
             {% endfor %}  
         </table>
     </div >
     <div class="admin_camp_details">
-      Start-date : {{campdata_need.start_date}}<br>
-      End-date : {{campdata_need.end_date}}<br>
-      description :{{campdata_need.goals}}<br> 
+     <b> Start-date </b>: {{campdata_need.start_date}}<br>
+     <b> End-date </b>: {{campdata_need.end_date}}<br>
+      <b>Goals</b> : {{campdata_need.goals}}<br>
+     <b> Budget </b>: {{campdata_need.budget}}<br>
+      <b>Description </b>: {{campdata_need.description}}<br>
     </div>
   </div>
 </body>
 </html>
+ 

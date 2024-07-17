@@ -281,11 +281,83 @@ def logincamp():
     campdata_need=None
     return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
 
+@app.route("/admin_spons",methods=["GET"])
+def loginspons():
+    sponsdata=db.session.query(Sponsers).all()
+    spons1=None 
+    return render_template("admin_sponsers.html",sponsdata=sponsdata,spons1=spons1)
+
+@app.route("/admin_spons_flag/<spons_id>",methods=["GET"])
+def admin_spons_flag(spons_id):
+    sponsdata=db.session.query(Sponsers).all()
+    spons1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==spons_id).first()
+    spons1.flagged_spons=True
+    db.session.commit()
+    return  render_template("admin_sponsers.html",sponsdata=sponsdata,spons1=spons1)
+
+@app.route("/admin_spons_flag_true/<spons_id>",methods=["GET"])
+def admin_spons_flag1(spons_id):
+    sponsdata=db.session.query(Sponsers).all()
+    spons1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==spons_id).first()
+    spons1.flagged_spons=False
+    db.session.commit()
+    return  render_template("admin_sponsers.html",sponsdata=sponsdata,spons1=spons1)
+
+@app.route("/admin_user_flag/<user_id>",methods=["GET"])
+def admin_user_flag(user_id):
+    details=db.session.query(user).all()
+    user1=db.session.query(user).filter(user.user_id==user_id).first()
+    user1.flagged_user=True
+    db.session.commit()
+    return  render_template("admin_user.html",details=details)
+
+@app.route("/admin_user_flag_true/<user_id>",methods=["GET"])
+def admin_user_flag12(user_id):
+    details=db.session.query(user).all()
+    user1=db.session.query(user).filter(user.user_id==user_id).first()
+    user1.flagged_user=False    
+    db.session.commit()
+    return  render_template("admin_user.html",details=details)
+
 @app.route("/admin_camp/<int:camp_id>",methods=["GET"])
 def admin_camp(camp_id):
     campdata=db.session.query(campaigns).all()
     campdata_need=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
     return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
+
+@app.route("/admin_camp_flag/<int:camp_id>",methods=["GET"])
+def admin_camp_flag(camp_id):
+    campdata=db.session.query(campaigns).all()
+    campdata_need=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+    campdata_need.flagged_camp=True
+    db.session.commit()
+    return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
+
+@app.route("/admin_camp_flag_true/<int:camp_id>",methods=["GET"])
+def admin_camp_flag122(camp_id):
+    campdata=db.session.query(campaigns).all()
+    campdata_need=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+    campdata_need.flagged_camp=False
+    db.session.commit()
+    return render_template('admin_camp.html',campdata=campdata,campdata_need=campdata_need)
+
+@app.route("/admin_spons/<int:spons_id>",methods=["GET"])
+def admin_spons(spons_id):
+    sponsdata=db.session.query(Sponsers).all()
+    spons1=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==spons_id).first()
+    return render_template("admin_sponsers.html",sponsdata=sponsdata,spons1=spons1)
+
+@app.route("/admin_info",methods=["GET"])
+def admin_info():
+    infodata=db.session.query(influencer).all()
+    info12=None
+    return render_template("admin_info.html",infodata=infodata,info12=info12)
+
+@app.route("/admin_info/<int:info_id>")
+def admin_info1(info_id):
+    infodata=db.session.query(influencer).all()
+    info12=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
+    return render_template("admin_info.html",infodata=infodata,info12=info12)
 #sponser files
 
 @app.route("/create_camp/<int:user_id>")

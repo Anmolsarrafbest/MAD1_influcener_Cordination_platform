@@ -263,13 +263,13 @@
 }
 
 .seperate{
-    margin-top: 10px;
     display: flex;
 }
 
 .admin_camp_details{
+    font-family: 'Segoe UI';
     font-size: larger;
-    text-align: center;
+    text-align:start;
     align-items: center;
     border-radius: 20px;
     height: 80vh;
@@ -279,4 +279,5 @@
     background-color:lightblue;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
