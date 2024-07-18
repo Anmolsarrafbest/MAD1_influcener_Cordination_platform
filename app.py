@@ -353,11 +353,45 @@ def admin_info():
     info12=None
     return render_template("admin_info.html",infodata=infodata,info12=info12)
 
-@app.route("/admin_info/<int:info_id>")
+@app.route("/admin_info/<int:info_id>",methods={"GET"})
 def admin_info1(info_id):
     infodata=db.session.query(influencer).all()
     info12=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
     return render_template("admin_info.html",infodata=infodata,info12=info12)
+
+@app.route("/admin_info_flag/<int:info_id>",methods=["GET"])
+def info_flag(info_id):
+    infodata=db.session.query(influencer).all()
+    info12=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
+    info12.flagged_info=True
+    db.session.commit()
+    return render_template("admin_info.html",infodata=infodata,info12=info12)
+
+@app.route("/admin_info_flag_false/<int:info_id>",methods=["GET"])
+def info_flag11(info_id):
+    infodata=db.session.query(influencer).all()
+    info12=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
+    info12.flagged_info=False
+    db.session.commit()
+    return render_template("admin_info.html",infodata=infodata,info12=info12)
+
+
+@app.route("/admin_adreq",methods=["GET"])
+def admin_adreq():
+    addata=db.session.query(Ad_request).all()
+    data=dict()
+    count=1
+    for i in addata:
+        sponser=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
+        company=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
+        data[count]=[i.adreq_id,sponser.Company_name,company.name,i.status,i.flagged_ad_reqd]
+        count+=1
+    print(data)    
+    return render_template("admin_adreq.html",addata=addata,data=data)
+
+
+
+
 #sponser files
 
 @app.route("/create_camp/<int:user_id>")

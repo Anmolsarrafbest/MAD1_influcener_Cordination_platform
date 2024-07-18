@@ -42,23 +42,25 @@
   </ul>
     <div class="seperate">
       <div style="width: 50%; margin-left: 20px;">
-          <h4>Here, you will find all details of campaigns.</h4><br>
+          <h4>Here, you will find all details of Ad-requests.</h4><br>
           <table class="table table-hover">
             <tr>
-              <th>Name</th>
-              <th>Role</th>
+              <th>Sponsers</th>
+              <th>Campaign</th>
+              <th>Status</th>
               <th>Flagged</th>
               <th>Mark</th>
             </tr>
-              {% for user in details %}
+              {% for i in data %}
             <tr>
-              <td>{{ user.username }}</td>
-              <td>{{user.role}}</td>
-              <td>{{user.flagged_user}}</td>
-              {% if user.flagged_user == false %}
-              <td><a class="btn btn-danger" href="/admin_user_flag/{{user.user_id}}">mark it</a></td>
+              <td>{{ data[i][1] }}</td>
+              <td>{{data[i][2]}}</td>
+              <td>{{data[i][3]}}</td>
+              <td>{{data[i][4]}}</td>
+              {% if data[i][4] == false %}
+              <td><a class="btn btn-danger" href="/admin_ad_flag/{{data[i][0]}}">mark it</a></td>
               {% else %}
-              <td><a class="btn btn-success" href="/admin_user_flag_true/{{user.user_id}}">unmark it</a></td>
+              <td><a class="btn btn-success" href="/admin_ad_flag_true/{{data[i][0]}}">unmark it</a></td>
               {% endif %}
             </tr>
               {% endfor %}  

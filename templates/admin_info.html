@@ -28,7 +28,7 @@
         <a class="nav-link active" aria-current="page" href="/admin_info" >influencers</a>
       </li>  
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="" >Ad-requests</a>
+        <a class="nav-link active" aria-current="page" href="/admin_adreq" >Ad-requests</a>
     </li>
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="" >Flagged_Campaign</a>
@@ -57,9 +57,9 @@
             <td><a href="/admin_info/{{i.influencer_id}}">view</a></td>
             <td>{{i.flagged_info}}</td>
             {% if i.flagged_info == false %}
-            <td><a class="btn btn-danger" href="">mark it</a></td>
+            <td><a class="btn btn-danger" href="/admin_info_flag/{{i.influencer_id}}">mark it</a></td>
             {% else %}
-            <td><a class="btn btn-success" href="">unmark it</a></td>
+            <td><a class="btn btn-success" href="/admin_info_flag_false/{{i.influencer_id}}">unmark it</a></td>
             {% endif %}
 
         </tr>
