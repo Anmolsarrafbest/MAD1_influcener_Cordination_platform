@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </head>
-<body>
+<body style="background-color: lightgray;">
     <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/login">Home</a>
@@ -29,22 +29,29 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/admin_adreq" >Ad-requests</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/login_users/flag">Flagged-Users</a>
+      </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="" >Flagged_Campaign</a>
+          <a class="nav-link active" aria-current="page" href="/login_camp/flag" >Flagged_Campaign</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="" >Flagged_sponsers</a>
+          <a class="nav-link active" aria-current="page" href="/login_spons/flag" >Flagged_sponsers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="" >Flagged_influencer</a>
+          <a class="nav-link active" aria-current="page" href="/admin_info/flag" >Flagged_influencer</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/admin_adreq/flag" >Flagged_adreq</a>
         </li>
       </ul>
 <br>
-Active users=  {{user_count}}<br>
-Total Number of sponsers={{spons_count}}<br>
-Total number of campagins={{camp_count}}<br>
+<div class="data222">
+Active users =  {{user_count}}<br>
+Total Number of sponsers = {{spons_count}}<br>
+Total number of campagins = {{camp_count}}<br>
 Total number of influencers = {{infu_count}}<br>
-Totaa number of ad-requests ={{adcount}}
-
+Totaa number of ad-requests = {{adcount}}
+</div>
 </body>
 </html>

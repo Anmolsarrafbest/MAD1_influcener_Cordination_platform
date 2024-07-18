@@ -275,6 +275,11 @@ def loginuser():
     det=db.session.query(user).filter(user.username==user.username).all()
     return render_template('admin_user.html',details=det)
 
+@app.route("/login_users/flag",methods=["GET"])
+def loginuser_flag():
+    det=db.session.query(user).filter(user.username==user.username).all()
+    return render_template('admin_flaguser1.html',details=det)
+
 @app.route("/login_camp",methods=["GET"])
 def logincamp():
     campdata=db.session.query(campaigns).all()
@@ -389,8 +394,68 @@ def admin_adreq():
     print(data)    
     return render_template("admin_adreq.html",addata=addata,data=data)
 
+@app.route("/admin_ad_flag/<int:adreq_id>",methods=["GET"])
+def adreq_flag(adreq_id):
+    addata=db.session.query(Ad_request).all()
+    add1=db.session.query(Ad_request).filter(Ad_request.adreq_id==adreq_id).first()
+    add1.flagged_ad_reqd=True
+    db.session.commit()
+    data=dict()
+    count=1
+    for i in addata:
+        sponser=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
+        company=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
+        data[count]=[i.adreq_id,sponser.Company_name,company.name,i.status,i.flagged_ad_reqd]
+        count+=1
+    print(data)    
+    return render_template("admin_adreq.html",addata=addata,data=data)
 
+@app.route("/admin_ad_flag_true/<int:adreq_id>",methods=["GET"])
+def adreq_flag12(adreq_id):
+    addata=db.session.query(Ad_request).all()
+    add1=db.session.query(Ad_request).filter(Ad_request.adreq_id==adreq_id).first()
+    add1.flagged_ad_reqd=False
+    db.session.commit()
+    data=dict()
+    count=1
+    for i in addata:
+        sponser=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
+        company=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
+        data[count]=[i.adreq_id,sponser.Company_name,company.name,i.status,i.flagged_ad_reqd]
+        count+=1
+    print(data)    
+    return render_template("admin_adreq.html",addata=addata,data=data)
 
+@app.route("/login_camp/flag",methods=["GET"])
+def logincampflag():
+    campdata=db.session.query(campaigns).all()
+    campdata_need=None
+    return render_template('admin_flagcamp.html',campdata=campdata,campdata_need=campdata_need)
+
+@app.route("/login_spons/flag",methods=["GET"])
+def loginsponsflag():
+    sponsdata=db.session.query(Sponsers).all()
+    spons1=None 
+    return render_template("admin_flagspon.html",sponsdata=sponsdata,spons1=spons1)
+
+@app.route("/admin_info/flag",methods=["GET"])
+def admin_infoflag():
+    infodata=db.session.query(influencer).all()
+    info12=None
+    return render_template("admin_flaguser.html",infodata=infodata,info12=info12)
+
+@app.route("/admin_adreq/flag",methods=["GET"])
+def admin_adreq_flag():
+    addata=db.session.query(Ad_request).all()
+    data=dict()
+    count=1
+    for i in addata:
+        sponser=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==i.sponsers_id).first()
+        company=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
+        data[count]=[i.adreq_id,sponser.Company_name,company.name,i.status,i.flagged_ad_reqd]
+        count+=1
+    print(data)    
+    return render_template("admin_flagadreq.html",addata=addata,data=data)
 
 #sponser files
 

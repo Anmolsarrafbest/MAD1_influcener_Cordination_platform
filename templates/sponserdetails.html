@@ -7,34 +7,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="\static\style.css">
 </head>
-<body>
-    <!-- camopany name, industry, budget -->
-    welcome sponsers
+<body style="background-color: antiquewhite;">
+    <h2>&nbsp;<b>  welcome sponsers</h2><hr></b>
     <br>
-    <form method="POST" action="/sponserdetails" id = "data-form">
-        <div >
-            <input type="hidden" name="user1" value="{{ user1 }}" />
-        </div>
-        <div>
-            <input type="hidden" name="password" value="{{ password }}" />
-        </div>
-        <div>
-            <input type="hidden" name="role" value="{{ role }}" />
-        </div>
-        <div>
-            <label>Name of the company: </label>
-            <input type="placeholder" name="company_name"  />
-        </div>
-        <div>
-            <label>industry: </label>
-            <input type="placeholder" name="industry" />
-        </div>
-        <div>
-           <label>budget: </label>
-           <input type="'placeholder" name="budget">
-        </div>
-        <input type="submit" value="Submit"/>
-    </form>
+    <div style="width: 70%;margin-left: 15%;margin-top: 20px;"> 
+        <form class="row g-3" method="POST" action="/sponserdetails" id = "data-form">
+            <div >
+                <input type="hidden" name="user1" value="{{ user1 }}" />
+            </div>
+            <div >
+                <input type="hidden" name="password" value="{{ password }}" />
+            </div>
+            <div >
+                <input type="hidden" name="role" value="{{ role }}" />
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="name">Name of the company: </label>
+                <input type="placeholder" name="company_name"  class="form-control" />
+            </div><br>
+            <div class="col-12">
+                <label class="form-label" for="inputcity"> industry: </label>
+                <input type="placeholder" name="industry" class="form-control"/>
+            </div><br>
+            <div class="col-12">
+            <label class="form-label" for="inputcity"> budget: </label>
+            <input type="'placeholder" name="budget" class="form-control">
+            </div><br>
+            <input  class="btn btn-outline-success" type="submit" value="Submit"/>
+        </form>
+    </div>
 </body>
 </html>
