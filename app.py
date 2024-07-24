@@ -74,6 +74,8 @@ def countsss(x):
     for i in x:
         count+=1
     return count    
+
+
 @app.route("/",methods=["GET"])
 def home():
     return render_template("logging.html")
@@ -92,7 +94,10 @@ def returns():
             infudata=db.session.query(influencer).all()
             addata=db.session.query(Ad_request).all()
             spon_data=db.session.query(Sponsers).all()
-            
+            money=0
+            for i in addata:
+                money+=int(i.payment_amount)
+            print(money)
             user_count=countsss(data)
             camp_count=countsss(campdata)
             infu_count=countsss(infudata)
@@ -100,9 +105,10 @@ def returns():
             spons_count=countsss(spon_data)
             # for i in data:
             #     user_count+=1
-            return render_template('admin.html',
+            return render_template('admin.html',money=money,
                                    data=data,
-                                   user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
+                                   user_count=user_count,
+                                   camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
         else:
             return render_template('Notadmin.html')
     elif role=="Sponsers":
@@ -203,6 +209,15 @@ def sponser_details():
     usernames=request.form["user1"]
     passwords=request.form["password"]
     roles=request.form['role']
+    
+
+
+
+
+
+
+
+    
     nuser=user(username=usernames,password=passwords,role=roles)
     ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
@@ -249,6 +264,8 @@ def resolve():
     flash('You have been successfully registered! please logg in ')    
     return render_template("logging.html")
 
+
+
 #admin files
     
 @app.route("/login",methods=['GET'])
@@ -263,10 +280,12 @@ def loginadmin():
     camp_count=countsss(campdata)
     infu_count=countsss(infudata)
     adcount=countsss(addata)
+    money=0
     spons_count=countsss(spon_data)
-    # for i in data:
-    #     user_count+=1
-    return render_template('admin.html',
+    for i in addata:
+        money+=int(i.payment_amount)
+    print(money)
+    return render_template('admin.html',money=money,
                             data=data,
                             user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
 
@@ -781,12 +800,77 @@ def user_update(infl_id):
         return redirect(f"/userlogin/{data.user_id}")
 
 
+@app.route("/user/<int:camp_id>/<int:info_id>",methods=["GET","POST"])
+def req_use(camp_id,info_id):
+    if request.method=="GET":
+        campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+        userdata=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
+        return render_template("user_adre.html",camp_id=camp_id,info_id=info_id,userdata=userdata,campdata=campdata)
+    else:
+        name=request.form["Name12"]
+        payment=request.form["Payment"]
+        message=request.form["message"]
+        terms=request.form["req"]
+        campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+        addq=Ad_request(campaigns_id=camp_id,sponsers_id=campdata.sponser_id,
+                   requirements=terms,
+                   messages=message,payment_amount=payment,status="Modified",Influ_id=info_id,flagged_ad_reqd=False)
+        db.session.add(addq)
+        db.session.commit()
+        user11=db.session.query(influencer).filter(influencer.influencer_id==info_id).first()
+        return redirect(f"/userlogin/{user11.user_id}")
 
+#stats
 
+@app.route("/user/stats/<int:userid>",methods=["GET","POST"])
+def stats(userid):
+    data=db.session.query(user).all()
+    campdata=db.session.query(campaigns).all()
+    infudata=db.session.query(influencer).all()
+    addata=db.session.query(Ad_request).all()
+    spon_data=db.session.query(Sponsers).all()
+    money=0
+    for i in addata:
+        money+=int(i.payment_amount)
+    print(money)
+    user_count=countsss(data)
+    camp_count=countsss(campdata)
+    infu_count=countsss(infudata)
+    adcount=countsss(addata)
+    spons_count=countsss(spon_data)
+    suser_id=None
+    return render_template("stats.html",money=money,
+                            user_count=user_count,
+                            camp_count=camp_count,suser_id=suser_id,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)
 
+@app.route("/user/home/<int:userid>",methods=["GET"])
+def user_home1(userid):
+    return redirect(f"/userlogin/{userid}")
 
+@app.route("/sponser/stats/<int:suser_id>",methods=["GET","POST"])
+def stats1(suser_id):
+    data=db.session.query(user).all()
+    campdata=db.session.query(campaigns).all()
+    infudata=db.session.query(influencer).all()
+    addata=db.session.query(Ad_request).all()
+    spon_data=db.session.query(Sponsers).all()
+    money=0
+    for i in addata:
+        money+=int(i.payment_amount)
+    print(money)
+    user_count=countsss(data)
+    camp_count=countsss(campdata)
+    infu_count=countsss(infudata)
+    adcount=countsss(addata)
+    spons_count=countsss(spon_data)
+    userid=None
+    return render_template("stats.html",money=money,suser_id=suser_id,
+                            user_count=user_count,
+                            camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)
 
-
+@app.route("/sponser/home/<int:suserid>",methods=["GET"])
+def user_home11(suserid):
+    return redirect(f"/sponserhome//{suserid}")
 
 if __name__=="__main__":
     app.run(debug=True)

@@ -22,7 +22,7 @@
             <a class="nav-link" href="/sponser_home/find/{{ ans.user_id }}">Find</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Stats</a>
+            <a class="nav-link" href="/sponser/stats/{{ ans.user_id }}">Stats</a>
           </li>
         </ul>
         <a id="add_button" class="btn btn-primary" href="/sponser_home/find/{{ans.user_id}}">Create Add Req</a>
@@ -167,7 +167,7 @@
           {% if modified_requests == [] %}
           <h4 style="margin-left: 30px;">No new request</h4>
           {% endif %}  
-      {% endif %}
+      {% endif %}<br>
       <h2 id="head2"><span class="badge text-bg-danger">Rejected ad-request</span><hr></h2>
       {% if din is not none %}
       {% for i in din %}
