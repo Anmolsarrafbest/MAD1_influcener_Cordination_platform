@@ -25,10 +25,10 @@
                 <a class="nav-link" href="#">Stats</a>
               </li>
             </ul>
-            <form class="d-flex" id="search" method="POST" action="/sponser_home/value/{{ id }}">
+            <!-- <form class="d-flex" id="search" method="POST" action="/sponser_home/value/{{ id }}">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="value">
               <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            </form> -->
             <a id="logout" href="/">Logout</a>
           </div>
         </div>
@@ -36,10 +36,14 @@
       <div style="margin-top: 10px; margin-left: 20px;">
         <h2><b>Search for Influencer:- <hr></h2></b>
       </div>
+      <div class="containers">
+        <div class="sepearate_container">
       <table class="table table-success table-striped" id="tab1">
         <thead>
           <tr>
             <th>Name</th>
+            <th>Category</th>
+            <th>Niche</th>
             <th>Reach</th>
             <th>Action</th>
           </tr>
@@ -47,7 +51,9 @@
         <tbody>
           {% for user in userdata1 %}
           <tr>
-            <td  class="table-active">{{user}}</td>  
+            <td  class="table-active">{{userdata1[user][2]}}</td> 
+            <td  class="table-active">{{userdata1[user][3]}}</td>
+            <td  class="table-active">{{userdata1[user][4]}}</td>
             <td  class="table-active">{{userdata1[user][1]}}</td>
             <td  class="table-active"><a type="button" class="btn btn-warning" href="/sponser/request/{{ userdata1[user][0] }}">
               View </a>
@@ -56,7 +62,45 @@
             </td>
           </tr>
             {% endfor %}  
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+      <div class="contain2">
+        <form class="row g-2" id="search" method="POST" action="/sponser_home/value/{{ id }}" style="margin-top: 20px;margin-left: 20px; width: 80%;">
+          <div>
+          <label class="form-label">Name:</label><br>
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="value"><br>
+          </div>
+          <div>
+          <label class="form-label">Category: </label><br>
+          <select  name="cate" class="form-control">   
+            <option value="Beauty">Beauty</option>
+            <option value="Health">Health</option>
+            <option value="Content Marketing">Content Marketing</option>
+            <option value="Travelling">Travelling</option>
+            <option value="Business">Business</option>
+            <option value="Food">Food</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Education">Education</option>
+            <option value="Others">Others</option>
+          </select><br>
+          </div>
+          <div>
+            <label class="form-label">Niche:</label><br>
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="niche"><br>
+          </div>
+          <div>
+            <label class="form-label">Followers</label>
+            <select name="reach" class="form-control"> 
+              <option value="10000">1-10000</option>
+              <option value="100000">10000-100000</option>
+              <option value="1000000">100000-1000000</option>
+              <option value="infinity">More Than 1000000</option>
+            </select>
+          </div>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
     </body>
 </html>

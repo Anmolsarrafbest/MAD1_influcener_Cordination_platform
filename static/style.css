@@ -299,3 +299,17 @@
     margin-left: 15%;
     margin-top: 20px;
 }
+
+.containers{
+    display: flex;
+}
+
+.sepearate_container{
+    width: 70%;
+}
+.contain2{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: antiquewhite;
+    height: 80vh;
+    width: 30%;
+}

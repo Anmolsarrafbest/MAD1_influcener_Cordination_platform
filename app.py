@@ -86,9 +86,13 @@ def returns():
     password=request.form['pass']
     role=request.form['role']
     ans=db.session.query(user).filter(user.username==use2).first()
+    print(use2=="")
     passs=db.session.query(user).filter(user.password==password).first()
     if role =="Admin":
-        if use2=="admin_anmol" and password=="2024":
+        if use2 == "" or password == "":
+            flash("Username and password cannot be empty")
+            return redirect("/")
+        elif use2=="admin_anmol" and password=="2024":
             data=db.session.query(user).all()
             campdata=db.session.query(campaigns).all()
             infudata=db.session.query(influencer).all()
@@ -103,32 +107,46 @@ def returns():
             infu_count=countsss(infudata)
             adcount=countsss(addata)
             spons_count=countsss(spon_data)
-            # for i in data:
-            #     user_count+=1
             return render_template('admin.html',money=money,
                                    data=data,
                                    user_count=user_count,
                                    camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
+        elif use2!="admin_anmol" or password!="2024":
+            flash("check your username and password")
+            return redirect("/")
         else:
-            return render_template('Notadmin.html')
+            flash("You don't have admin rights")
+            return redirect("/")
     elif role=="Sponsers":
         #write code for the who had already registerd
-        if ans==None or passs==None:
-            return render_template("Notregistered.html")
-        elif ans.username==use2 and ans.password==password and ans.role==role:
-            id=ans.user_id
-            return redirect(f"/sponserhome/{id}")
-            # return render_template("sponser_home.html",ans=ans)
+        if use2 == "" or password == "":
+            flash("Username and password cannot be empty")
+            return redirect("/")
+        elif (ans!= None or passs !=None):
+            if (ans.username != use2 and ans.password==password and ans.role==role) or (ans.username ==use2 and ans.password!=password and ans.role==role) or (ans.username ==use2 and ans.password==password and ans.role!=role):
+                flash("please check your username and password and role")
+                return redirect("/")
+            elif ans.username==use2 and ans.password==password and ans.role==role:
+                id=ans.user_id
+                return redirect(f"/sponserhome/{id}")
         else:
-            return render_template("Notregistered.html")
+            flash("You are not registered")
+            return redirect("/")
+            
     else:
-        if ans==None or passs==None:
-            return render_template("Notregistered.html")
-        elif ans.username==use2 and ans.password==password and ans.role==role:
-            id=ans.user_id
-            return redirect(f"/userlogin/{id}")
+        if use2=="" or password=="":
+            flash("Username and password cannot be empty")
+            return redirect("/")
+        elif (ans!= None or passs !=None):
+            if (ans.username != use2 and ans.password==password and ans.role==role) or (ans.username ==use2 and ans.password!=password and ans.role==role) or (ans.username ==use2 and ans.password==password and ans.role!=role):
+                flash("please check your username and password and role")
+                return redirect("/")
+            elif ans.username==use2 and ans.password==password and ans.role==role:
+                id=ans.user_id
+                return redirect(f"/userlogin/{id}")
         else:
-            return render_template("Notregistered.html")
+            flash("You are not registered")
+            return redirect("/")
 
 @app.route("/userlogin/<int:id>",methods=["GET"])        
 def userlogin(id):
@@ -139,7 +157,7 @@ def userlogin(id):
     count=0
     Money=0
     if addata != []:
-        for i in addata:
+        for i in addata:  #change this ..... infuID is being taken from addata for user that does have any adreq
             k=i.sponsers_id
             campdata=db.session.query(campaigns).filter(campaigns.campaigns_id==i.campaigns_id).first()
             spons=db.session.query(Sponsers).filter(Sponsers.Sponsers_id == k).first()
@@ -158,7 +176,7 @@ def userlogin(id):
             count+=1
         return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
     else:
-        return render_template("user.html",user1=user1,desh=desh,Money=Money)
+        return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=user1.influencer_id)
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
     ans=db.session.query(user).get(id)
@@ -209,15 +227,6 @@ def sponser_details():
     usernames=request.form["user1"]
     passwords=request.form["password"]
     roles=request.form['role']
-    
-
-
-
-
-
-
-
-    
     nuser=user(username=usernames,password=passwords,role=roles)
     ans=db.session.query(user).filter(user.username==usernames).first()
     db.session.add(nuser)
@@ -236,7 +245,10 @@ def resolve():
     role1=request.form["role"]
     naam=request.form['vname']
     Cate=request.form['cate']
-    Niche=request.form['niche']
+    Niche=request.form['niche'] #may add option for different niches >>>>>
+
+
+
     reach=request.form['follows']
     photo = request.files['photo']
     nuser=user(username=user1,password=pass1,role=role1)
@@ -561,26 +573,41 @@ def details():
 def homelander(id):
     userdata1=dict()
     ans=db.session.query(user).filter(user.role=='user').all()
+    c=0
     for i in ans:
-        k=i.user_id
-        l=[]
-        name=i.username
-        userdata=db.session.query(influencer).filter(influencer.user_id==k).first()
-        l.append(k)
-        l.append(userdata.reach)
-        userdata1[name]=l
+        userdata=db.session.query(influencer).filter(influencer.user_id==i.user_id).first()
+        userdata1[c]=[i.user_id,userdata.reach,userdata.name,userdata.Category,userdata.Niche]
+        c=c+1
     return render_template("sponser_user_find.html",userdata1=userdata1,id=id)
 
 @app.route("/sponser_home/value/<int:id>",methods=["POST"])
 def vought(id):
-    value=request.form["value"]
-    data=db.session.query(user).filter(user.username==value).first()
-    userdata=db.session.query(influencer).filter(influencer.user_id==data.user_id).first()
-    if data.role=="user":
-        ans=data
-    else:
-        ans=None    
-    return render_template("sponser_user_find1.html",id=id,ans=ans,userdata=userdata)
+    #value=request.form["value"]
+    category=request.form["cate"]
+    niche=request.form["niche"]
+    #followers=request.form["reach"]
+    userdata1=dict()
+    counting=0
+    if category !="" and niche == "":
+        data=db.session.query(influencer).filter(influencer.Category==category).all()
+        for i in data:
+            userdata1[counting]=[i.user_id,i.reach,i.name,i.Category,i.Niche]
+            counting+=1
+        return render_template("sponser_user_find.html",data=data,userdata1=userdata1,id=id)
+    elif category =="" and niche !="":
+        data=db.session.query(influencer).filter(influencer.Niche==niche).all()
+        for i in data:
+            userdata1[counting]=[i.user_id,i.reach,i.name,i.Category,i.Niche]
+            counting+=1
+        return render_template("sponser_user_find.html",data=data,userdata1=userdata1,id=id)
+    elif category !="" and niche !="":
+        data=db.session.query(influencer).all()
+        for i in data:
+            if category==i.Category and niche==i.Niche:
+                userdata1[counting]=[i.user_id,i.reach,i.name,i.Category,i.Niche]
+                counting+=1
+        return render_template("sponser_user_find.html",data=data,userdata1=userdata1,id=id)        
+    
 
 #find campagins as sponsers
 
@@ -601,8 +628,7 @@ def find_camp(id):
         name=request.form["name"]
         budget=request.form["budget"]
         if len(name)==0:
-            name=None
-        print(name==None)    
+            name=None    
         try:
             budget=int(budget)
         except ValueError:
@@ -749,7 +775,7 @@ def accepted(ad_id):
     db.session.commit()
     return redirect (f"/userlogin/{userdata.user_id}")
 
-@app.route("/view/Sponser/reject/<int:id>",methods=["GET"])
+@app.route("/view/Sponser/reject/<int:ad_id>",methods=["GET"])
 def rejct_spons(ad_id):
     add=db.session.query(Ad_request).filter(Ad_request.adreq_id==ad_id).first()
     sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==add.sponsers_id).first()
@@ -870,7 +896,7 @@ def stats1(suser_id):
 
 @app.route("/sponser/home/<int:suserid>",methods=["GET"])
 def user_home11(suserid):
-    return redirect(f"/sponserhome//{suserid}")
+    return redirect(f"/sponserhome/{suserid}")
 
 if __name__=="__main__":
     app.run(debug=True)

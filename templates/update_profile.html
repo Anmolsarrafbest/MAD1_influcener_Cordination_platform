@@ -20,12 +20,25 @@
                 </div><br>
                 <div class="col-12">
                     <label class="form-label">Category: </label>
-                    <input class="form-control" type="placeholder" name="cate" value="{{data.Category}}"/>
+                    <select  name="cate" class="form-control" style="width: 60%;">
+                     <option value={{data.Category}}>{{data.Category}}</option>   
+                     <option value="Beauty">Beauty</option>
+                     <option value="Health">Health</option>
+                     <option value="Content Marketing">Content Marketing</option>
+                     <option value="Travelling">Travelling</option>
+                     <option value="Business">Business</option>
+                     <option value="Food">Food</option>
+                     <option value="Fashion">Fashion</option>
+                     <option value="Education">Education</option>
+                     <option value="Others">Others</option>
+                    </select><br>
+                 </div><br>
+                <div class="col-12"> 
+                    <label class="form-label">Niche: </label>
+                    <input class="form-control" type="placeholder" name="niche" value="{{data.Niche}}"/>
                 </div><br>
-                <div class="col-12">
-                <label class="form-label">Niche: </label>
-                    <input  class="form-control" type="placeholder" name="niche" value="{{data.Niche}}">
-                </div><br>
+                
+                
                 <div class="col-12">
                     <label class="form-label">followers: </label>
                     <input class="form-control" type="placeholder" name="follows" value="{{data.reach}}">
