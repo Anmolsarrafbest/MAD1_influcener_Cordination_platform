@@ -25,10 +25,6 @@
                 <a class="nav-link" href="#">Stats</a>
               </li>
             </ul>
-            <!-- <form class="d-flex" id="search" method="POST" action="/sponser_home/value/{{ id }}">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="value">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form> -->
             <a id="logout" href="/">Logout</a>
           </div>
         </div>
@@ -68,10 +64,6 @@
       <div class="contain2">
         <form class="row g-2" id="search" method="POST" action="/sponser_home/value/{{ id }}" style="margin-top: 20px;margin-left: 20px; width: 80%;">
           <div>
-          <label class="form-label">Name:</label><br>
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="value"><br>
-          </div>
-          <div>
           <label class="form-label">Category: </label><br>
           <select  name="cate" class="form-control">   
             <option value="Beauty">Beauty</option>
@@ -88,15 +80,6 @@
           <div>
             <label class="form-label">Niche:</label><br>
             <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="niche"><br>
-          </div>
-          <div>
-            <label class="form-label">Followers</label>
-            <select name="reach" class="form-control"> 
-              <option value="10000">1-10000</option>
-              <option value="100000">10000-100000</option>
-              <option value="1000000">100000-1000000</option>
-              <option value="infinity">More Than 1000000</option>
-            </select>
           </div>
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>

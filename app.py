@@ -177,6 +177,7 @@ def userlogin(id):
         return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=ifudata.influencer_id)
     else:
         return render_template("user.html",user1=user1,desh=desh,Money=Money,infu_id=user1.influencer_id)
+
 @app.route("/sponserhome/<int:id>",methods=["GET"])
 def sponser_login(id):
     ans=db.session.query(user).get(id)
@@ -207,14 +208,23 @@ def value():
     user1=request.form["username"]
     password=request.form['pass']
     ans=db.session.query(user).filter(user.username==user1).first()
-    if role=="Sponsers":
-        if ans==user1:
-            return render_template('usernotallowed.html',ans=ans,user1=user1)
+    print(ans)
+    if user1=="" or password=="":
+        flash("username and password cannot be empty")
+        return render_template('register.html')
+    
+    if role =="Sponsers":
+        if ans !=None:
+            if ans.username == user1:
+                flash("name is already taken, choose another name")
+                return render_template('register.html')
         else:
             return render_template("sponserdetails.html",ans=ans,user1=user1,password=password,role=role)
-    elif role=="user":
-        if ans==user1:
-            return render_template('usernotallowed.html',ans=ans,user1=user1)
+    elif role == "user":
+        if ans !=None:
+         if ans.username == user1:
+            flash("name is already taken, choose another name")
+            return render_template('register.html')
         else:
             return render_template("user_details.html",user1=user1,role=role,password=password)
 
@@ -245,10 +255,7 @@ def resolve():
     role1=request.form["role"]
     naam=request.form['vname']
     Cate=request.form['cate']
-    Niche=request.form['niche'] #may add option for different niches >>>>>
-
-
-
+    Niche=request.form['niche'] 
     reach=request.form['follows']
     photo = request.files['photo']
     nuser=user(username=user1,password=pass1,role=role1)
@@ -272,17 +279,13 @@ def resolve():
                      photo_path=photo_path)
     db.session.add(info1)
     db.session.commit()
-    id=users.user_id
     flash('You have been successfully registered! please logg in ')    
     return render_template("logging.html")
-
-
 
 #admin files
     
 @app.route("/login",methods=['GET'])
 def loginadmin():
-    
     data=db.session.query(user).all()
     campdata=db.session.query(campaigns).all()
     infudata=db.session.query(influencer).all()
@@ -490,20 +493,15 @@ def admin_adreq_flag():
 
 #sponser files
 
-@app.route("/create_camp/<int:user_id>")
+@app.route("/create_camp/<int:user_id>",methods=["GET"])
 def start(user_id):
     user2 = db.session.query(user).get(user_id)
-    iduser=user_id
-
     return render_template("addcamp.html",user2=user2)
 
 @app.route("/campdetails",methods=["POST"])
 def campdet():
     id=request.form["userid"]
     sponser_id=db.session.query(Sponsers).filter(Sponsers.user_id==id).first()
-    print(id)
-    print(sponser_id)
-    print(sponser_id.user_id)
     campname=request.form["nameofcamp"]
     stime=request.form["startime"]
     dtime=request.form["endtime"]
@@ -511,8 +509,7 @@ def campdet():
     visiblity=request.form["visiblity"]
     goals=request.form["goals"]
     description=request.form["description"]
-    ans=db.session.query(user).get(id)
-    campaign1=campaigns(sponser_id=sponser_id.user_id,
+    campaign1=campaigns(sponser_id=sponser_id.Sponsers_id,
                         name=campname,
                         start_date=stime,
                         end_date=dtime,
@@ -536,8 +533,8 @@ def updatecamp(campaigns_id):
         data=db.session.query(campaigns).get(campaigns_id)
         return render_template("update_campdetails.html",data=data)
     elif request.method=="POST":
-        data=db.session.query(campaigns).get(campaigns_id)
-        print(data.name)
+        #data=db.session.query(campaigns).get(campaigns_id)
+        data=db.session.query(campaigns).filter(campaigns.campaigns_id==campaigns_id).first()
         name=request.form["Name"]
         goals=request.form["Goals"]
         start_date=request.form["sdate"]
@@ -554,12 +551,14 @@ def updatecamp(campaigns_id):
         db.session.commit()
         return redirect(f"/sponserhome/{data.sponser_id}")
 
-@app.route("/delete_campagin/<int:campaigns_id>",methods=["GET"])
-def delete(campaigns_id):
-    data=db.session.query(campaigns).get(campaigns_id)
-    adddata=db.session.query(Ad_request).filter(Ad_request.campaigns_id==campaigns_id).all()
+@app.route("/delete_campagin/<int:camp_id>",methods=["GET"])
+def delete(camp_id):
+    data=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
+    adddata=db.session.query(Ad_request).filter(Ad_request.campaigns_id==data.campaigns_id).all()
+    print(adddata)
     id=data.sponser_id
-    db.session.delete(adddata)
+    for i in adddata:
+        db.session.delete(i)
     db.session.delete(data)
     db.session.commit()
     return redirect(f"/sponserhome/{id}")

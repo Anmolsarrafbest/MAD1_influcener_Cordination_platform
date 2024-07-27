@@ -288,9 +288,13 @@
 }
 
 .det3{  
-    margin-left: 15%;
-    margin-right: 15%;   
-    background-color:sandybrown;
+    margin-left: 30%;
+    margin-right: 15%;
+    width: 45%;
+    border: 8px solid #CADCFC;  
+    background-color:#CADCFC ;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 30px;
 }
 
@@ -312,4 +316,8 @@
     background-color: antiquewhite;
     height: 80vh;
     width: 30%;
+}
+.formdecorator
+{
+margin-left: 20px;
 }
