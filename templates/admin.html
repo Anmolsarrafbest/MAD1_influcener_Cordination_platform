@@ -48,16 +48,20 @@
 <br>
 <div>
 <div class="data222">
-Active users =  {{user_count}}<br>
-Total Number of sponsers = {{spons_count}}<br>
-Total number of campagins = {{camp_count}}<br>
-Total number of influencers = {{infu_count}}<br>
-Total number of ad-requests = {{adcount}}<br>
-Total number money traded = ${{ money}}
+  Active users =  {{user_count}}<br>
+  Total Number of sponsers = {{spons_count}}<br>
+  Total number of campagins = {{camp_count}}<br>
+  Total number of influencers = {{infu_count}}<br>
+  Total number of ad-requests = {{adcount}}<br>
+  Total number money traded = ${{ money}}
 </div>&nbsp;
 <div>
   <h3 style="margin-left:20px">Influncer's Data</h3><hr>
   <img src="{{ url_for('static', filename='uploads/pie_chart.png') }}" alt="Pie Chart">
+</div>
+<div>
+  <h3 style="margin-left:20px">Sponser's Data</h3><hr>
+  <img src="{{ url_for('static', filename='uploads/pie_chart2.png') }}" alt="Pie Chart">
 </div>
 </div>
 </div>

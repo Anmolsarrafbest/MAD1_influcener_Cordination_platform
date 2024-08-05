@@ -17,8 +17,6 @@ app.secret_key = '123456789Anmol'
 
 # defining models
 Active=0
-
-
 class user(db.Model):
     __tablename__='user'
     user_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
@@ -82,9 +80,16 @@ def countsss(x):
 def generatepie(data,mylabel,):
     plt.pie(data, labels=mylabel,startangle=90,autopct='%1.1f%%')
     plt.title("Influcencer Distrubution accros The platform")
-    # plt.show()
+    
     plt.savefig('static/uploads/pie_chart.png')
-    plt.close() 
+    plt.close()
+
+def generatepie_spons(data,label):
+    plt.pie(data,labels=label,startangle=90,autopct='%1.1f%%')
+    plt.title("Sponsers Distrubution accros The platform")
+    
+    plt.savefig('static/uploads/pie_chart2.png')
+    plt.close()
 
 @app.route("/",methods=["GET"])
 def home():
@@ -303,6 +308,16 @@ def loginadmin():
     mylabel=y.keys()
     data=y.values()         
     generatepie(data,mylabel) 
+    a=dict()
+    for i in spon_data:
+        if i.industry in a:
+            a[i.industry]+=1
+        else :
+            a[i.industry]=1
+    print(a)
+    datas=y.values()
+    labels=y.keys()
+    generatepie_spons(datas,labels)            
     return render_template('admin.html',money=money,
                             data=data,
                             user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
@@ -882,6 +897,16 @@ def stats(userid):
     mylabel=y.keys()
     data=y.values()         
     generatepie(data,mylabel) 
+    a=dict()
+    for i in spon_data:
+        if i.industry in a:
+            a[i.industry]+=1
+        else :
+            a[i.industry]=1
+    print(a)
+    datas=y.values()
+    labels=y.keys()
+    generatepie_spons(datas,labels) 
     return render_template("stats.html",money=money,
                             user_count=user_count,
                             camp_count=camp_count,suser_id=suser_id,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)
