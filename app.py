@@ -1,6 +1,9 @@
 from flask import Flask,render_template,request,redirect,flash
 from flask_sqlalchemy import SQLAlchemy
-import jinja2,os
+import jinja2,os,matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
 from werkzeug.utils import secure_filename
 api=None
 
@@ -14,6 +17,11 @@ app.secret_key = '123456789Anmol'
 
 # defining models
 Active=0
+#ADD pie charts showing the distribution of all different campagins
+
+
+
+
 
 class user(db.Model):
     __tablename__='user'
@@ -75,6 +83,13 @@ def countsss(x):
         count+=1
     return count    
 
+def generatepie(data,mylabel):
+    plt.pie(data, labels=mylabel,startangle=90)
+    plt.title("Influcencer Distrubution accros The platform")
+    
+    # plt.show()
+    plt.savefig('static/uploads/pie_chart.png')
+    plt.close() 
 
 @app.route("/",methods=["GET"])
 def home():
@@ -93,24 +108,7 @@ def returns():
             flash("Username and password cannot be empty")
             return redirect("/")
         elif use2=="admin_anmol" and password=="2024":
-            data=db.session.query(user).all()
-            campdata=db.session.query(campaigns).all()
-            infudata=db.session.query(influencer).all()
-            addata=db.session.query(Ad_request).all()
-            spon_data=db.session.query(Sponsers).all()
-            money=0
-            for i in addata:
-                money+=int(i.payment_amount)
-            print(money)
-            user_count=countsss(data)
-            camp_count=countsss(campdata)
-            infu_count=countsss(infudata)
-            adcount=countsss(addata)
-            spons_count=countsss(spon_data)
-            return render_template('admin.html',money=money,
-                                   data=data,
-                                   user_count=user_count,
-                                   camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
+            return redirect(f'/login')
         elif use2!="admin_anmol" or password!="2024":
             flash("check your username and password")
             return redirect("/")
@@ -299,10 +297,21 @@ def loginadmin():
     spons_count=countsss(spon_data)
     for i in addata:
         money+=int(i.payment_amount)
-    print(money)
+    y=dict()
+    for i in infudata:
+        if i.Category in y:
+            y[i.Category]+=1
+        else:
+            y[i.Category]=1
+    print(y)  
+    mylabel=y.keys()
+    data=y.values()         
+    generatepie(data,mylabel) 
     return render_template('admin.html',money=money,
                             data=data,
                             user_count=user_count,camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count)
+
+
 
 @app.route("/login_users",methods=["GET"])
 def loginuser():
@@ -864,6 +873,16 @@ def stats(userid):
     adcount=countsss(addata)
     spons_count=countsss(spon_data)
     suser_id=None
+    y=dict()
+    for i in infudata:
+        if i.Category in y:
+            y[i.Category]+=1
+        else:
+            y[i.Category]=1
+    print(y)  
+    mylabel=y.keys()
+    data=y.values()         
+    generatepie(data,mylabel) 
     return render_template("stats.html",money=money,
                             user_count=user_count,
                             camp_count=camp_count,suser_id=suser_id,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)
@@ -889,6 +908,15 @@ def stats1(suser_id):
     adcount=countsss(addata)
     spons_count=countsss(spon_data)
     userid=None
+    y=dict()
+    for i in infudata:
+        if i.Category in y:
+            y[i.Category]+=1
+        else:
+            y[i.Category]=1 
+    mylabel=y.keys()
+    data=y.values()         
+    generatepie(data,mylabel) 
     return render_template("stats.html",money=money,suser_id=suser_id,
                             user_count=user_count,
                             camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)

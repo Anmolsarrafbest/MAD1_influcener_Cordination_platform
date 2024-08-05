@@ -11,6 +11,14 @@
 
 </head>
 <body>
+    {% if suser_id is none %}
+    <div style="margin-left: 20px;"><a class="btn btn-success" href="/user/home/{{userid}}">user Home</a><br>
+        {% endif %}
+    </div>    
+    {% if userid is none %}
+    <div style="margin-left: 20px;"><a class="btn btn-success" href="/sponser/home/{{suser_id}}">sponser Home</a><br>
+    {% endif %}
+    </div>
     <div class="data222">
         Active users =  {{user_count}}<br>
         Total Number of sponsers = {{spons_count}}<br>
@@ -19,13 +27,9 @@
         Total number of ad-requests = {{adcount}}<br>
         Total number money traded = ${{ money}}
     </div>
-    {% if suser_id is none %}
-    <div style="margin-left: 20px;"><a class="btn btn-success" href="/user/home/{{userid}}">user Home</a>
-        {% endif %}
-        
-    {% if userid is none %}
-    <div style="margin-left: 20px;"><a class="btn btn-success" href="/sponser/home/{{suser_id}}">sponser Home</a>
-    {% endif %}
-    </div>
+    
+    <div>
+        <img src="{{ url_for('static', filename='uploads/pie_chart.png') }}" alt="Pie Chart">
+      </div>
 </body>
 </html>
