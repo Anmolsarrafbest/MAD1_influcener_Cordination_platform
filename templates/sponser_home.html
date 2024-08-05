@@ -17,7 +17,6 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/sponserhome/{{ ans.user_id }}">Home</a>
           </li>
-          
           <li class="nav-item">
             <a class="nav-link" href="/sponser_home/find/{{ ans.user_id }}">Find</a>
           </li>
@@ -36,7 +35,16 @@
       </div>
     </div>
   </nav>
-    <br>
+  <div style="display: flex;">
+    <div class="sidebar">
+      Name:= {{sdata.Company_name}}<br>
+      Remaining-Budget := $ {{sdata.budget}}<br>
+      <b><u>Important Points:-</u></b><br>
+      <li>Creating campagin's Money will be deducted from current budget </li>
+      <li>Deleting campagin will not recover any money</li>
+
+    </div>
+    <div>
     <h2 id="head2" ><span class="badge text-bg-success">Active Campaigns</span><h6 style="margin-left: 20px;">(Deleting any campagin will also delete ad request related to it)</h6><hr></h2>
     {% if campdata is not none %}
       {% for camp in campdata %}
@@ -201,6 +209,8 @@
           <h4 style="margin-left: 30px;">Nothing to show </h4>
           {% endif %}  
       {% endif %}
+    </div>  
+    </div>    
   </body>
   <link rel="stylesheet" href="\static\style.css">
   </html>

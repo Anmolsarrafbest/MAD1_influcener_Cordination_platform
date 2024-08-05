@@ -17,10 +17,6 @@ app.secret_key = '123456789Anmol'
 
 # defining models
 Active=0
-#ADD pie charts showing the distribution of all different campagins
-
-
-
 
 
 class user(db.Model):
@@ -179,6 +175,7 @@ def userlogin(id):
 def sponser_login(id):
     ans=db.session.query(user).get(id)
     sponsdata=db.session.query(Sponsers).filter(Sponsers.user_id==id).first()
+    print(sponsdata)
     campdata=db.session.query(campaigns).filter(campaigns.sponser_id == sponsdata.Sponsers_id).all()
     adddata=db.session.query(Ad_request).filter(Ad_request.sponsers_id == sponsdata.Sponsers_id).all()
     flag=True
@@ -191,7 +188,7 @@ def sponser_login(id):
         din[count]=[i.payment_amount,i.messages,i.requirements,i.status,i.adreq_id,userdata.username,]
         count+=1
     print(din)    
-    return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag,sponsdata=sponsdata.Sponsers_id)
+    return render_template("sponser_home.html",ans=ans,campdata=campdata,din=din,flag=flag,sponsdata=sponsdata.Sponsers_id,sdata=sponsdata)
 
 #register
 
@@ -517,6 +514,7 @@ def campdet():
     visiblity=request.form["visiblity"]
     goals=request.form["goals"]
     description=request.form["description"]
+    sponser_id.budget-=int(budg)
     campaign1=campaigns(sponser_id=sponser_id.Sponsers_id,
                         name=campname,
                         start_date=stime,
@@ -550,6 +548,7 @@ def updatecamp(campaigns_id):
         budget=request.form["budget"]
         description=request.form["description"]
         data.Visibility=request.form["visiblity"]
+        sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==data.sponser_id).first()
         data.name=name
         data.goals=goals
         data.start_date=start_date
@@ -557,14 +556,15 @@ def updatecamp(campaigns_id):
         data.budget=budget
         data.description=description
         db.session.commit()
-        return redirect(f"/sponserhome/{data.sponser_id}")
+        return redirect(f"/sponserhome/{sponsdata.user_id}")
 
 @app.route("/delete_campagin/<int:camp_id>",methods=["GET"])
 def delete(camp_id):
     data=db.session.query(campaigns).filter(campaigns.campaigns_id==camp_id).first()
     adddata=db.session.query(Ad_request).filter(Ad_request.campaigns_id==data.campaigns_id).all()
+    sponsdata=db.session.query(Sponsers).filter(Sponsers.Sponsers_id==data.sponser_id).first()
     print(adddata)
-    id=data.sponser_id
+    id=sponsdata.user_id
     for i in adddata:
         db.session.delete(i)
     db.session.delete(data)
