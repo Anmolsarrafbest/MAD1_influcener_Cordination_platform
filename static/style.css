@@ -12,14 +12,6 @@
     margin-left: 20px;
 }
 
-.form_data{
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    min-height: 100vh; 
-    margin-left: 55%;
-    color: white;
-}
 
 #data-form{
     display: block;
@@ -29,19 +21,20 @@
     justify-content: space-between;
 }
 
-.image{
-    background-color: #111D4A;
-    /* background-image: url("Slide1.JPG"); */
-    background-size: cover;
-}
 
-/* .btn-primary{
-    background-color:
-    
-} */
 #intro{
+    font-size:xx-large;
+    padding-top: 3%;   
+    text-align: center;
     color: white;
 }
+.form_data{
+    margin-top: 6%;
+    display: flex; 
+    justify-content: center; 
+    color: white;
+}
+
 
 .accordion-button:not(.collapsed) {
     background-color: #b6dcfe; 
@@ -309,7 +302,7 @@
 }
 
 .sepearate_container{
-    width: 70%;
+    width: 80%;
 }
 .contain2{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

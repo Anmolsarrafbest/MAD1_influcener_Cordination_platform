@@ -83,10 +83,9 @@ def countsss(x):
         count+=1
     return count    
 
-def generatepie(data,mylabel):
-    plt.pie(data, labels=mylabel,startangle=90)
+def generatepie(data,mylabel,):
+    plt.pie(data, labels=mylabel,startangle=90,autopct='%1.1f%%')
     plt.title("Influcencer Distrubution accros The platform")
-    
     # plt.show()
     plt.savefig('static/uploads/pie_chart.png')
     plt.close() 
