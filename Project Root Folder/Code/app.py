@@ -17,6 +17,7 @@ app.secret_key = '123456789Anmol'
 
 # defining models
 Active=0
+
 class user(db.Model):
     __tablename__='user'
     user_id=db.Column(db.Integer,primary_key=True,autoincrement=True)
@@ -70,6 +71,8 @@ class Ad_request(db.Model):
     Influ_id=db.Column(db.Integer,db.ForeignKey(influencer.influencer_id))
     flagged_ad_reqd=db.Column(db.Boolean, default=False)
 
+db.create_all()
+
 #basic logging
 def countsss(x):
     count=0
@@ -80,14 +83,12 @@ def countsss(x):
 def generatepie(data,mylabel,):
     plt.pie(data, labels=mylabel,startangle=90,autopct='%1.1f%%')
     plt.title("Influcencer Distrubution accros The platform")
-    
     plt.savefig('static/uploads/pie_chart.png')
     plt.close()
 
 def generatepie_spons(data,label):
     plt.pie(data,labels=label,startangle=90,autopct='%1.1f%%')
     plt.title("Sponsers Distrubution accros The platform")
-    
     plt.savefig('static/uploads/pie_chart2.png')
     plt.close()
 
@@ -604,10 +605,8 @@ def homelander(id):
 
 @app.route("/sponser_home/value/<int:id>",methods=["POST"])
 def vought(id):
-    #value=request.form["value"]
     category=request.form["cate"]
     niche=request.form["niche"]
-    #followers=request.form["reach"]
     userdata1=dict()
     counting=0
     if category !="" and niche == "":
@@ -941,6 +940,16 @@ def stats1(suser_id):
     mylabel=y.keys()
     data=y.values()         
     generatepie(data,mylabel) 
+    a=dict()
+    for i in spon_data:
+        if i.industry in a:
+            a[i.industry]+=1
+        else :
+            a[i.industry]=1
+    print(a)
+    datas=y.values()
+    labels=y.keys()
+    generatepie_spons(datas,labels)
     return render_template("stats.html",money=money,suser_id=suser_id,
                             user_count=user_count,
                             camp_count=camp_count,infu_count=infu_count,adcount=adcount,spons_count=spons_count,userid=userid)
