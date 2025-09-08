@@ -1,69 +1,93 @@
 Influencer Engagement and Sponsorship Coordination Platform (IESCP)
-📌 Overview
+Overview
+The Influencer Engagement and Sponsorship Coordination Platform (IESCP) is a web application designed to connect sponsors and influencers. Sponsors can advertise products/services via influencer campaigns, and influencers benefit monetarily by participating in ad campaigns. This project has three roles: Admin, Sponsor, and Influencer, each with specific dashboards and workflows.
 
-The Influencer Engagement and Sponsorship Coordination Platform (IESCP) is a web-based application built using Flask, Jinja2 + Bootstrap, and SQLite. It acts as a bridge between Sponsors and Influencers while providing oversight to Admins. Sponsors can create and manage campaigns, send ad requests, and monitor campaign performance. Influencers can search campaigns, accept/decline/renegotiate ad requests, and maintain a public profile. Admins have complete monitoring capabilities and can flag inappropriate activities.
+Project built with Flask (Python)
 
-The project has been designed to demonstrate full-stack web development concepts, role-based access, CRUD operations, and relational data handling.
+Uses Jinja2 templates and Bootstrap for responsive frontend
 
-🚀 Features
-👨‍💻 Admin Role
+Data stored in SQLite database
 
-Monitor all users, campaigns, and ad requests.
+All features run locally and do not require external hosting.
 
-View application statistics (active campaigns, flagged users, public vs private campaigns, etc.).
+Features
+User Roles
+Admin: Oversees platform activity, can flag users/campaigns, view statistics
 
-Flag inappropriate campaigns and users.
+Sponsor: Creates and manages campaigns, sends/accepts ad requests, tracks budgets
 
-💼 Sponsor Role
+Influencer: Receives/negotiates ad requests, manages their public profile, searches for campaigns
 
-Create, update, and delete campaigns.
+Core Functionality
+Login and user registration for all roles
 
-Send and manage ad requests for specific campaigns.
+Admin dashboard showing user, campaign, ad request statistics
 
-Search influencers by category, niche, or reach.
+Campaign management (create, edit, delete, public/private)
 
-Track budget and campaign performance.
+Ad request lifecycle management (create, edit, accept, reject, negotiate)
 
-🎥 Influencer Role
+Search influencers/campaigns by niche, reach, budget
 
-Search public campaigns based on niche, relevance, and budget.
+Influencers can update their own profiles
 
-Accept, reject, or renegotiate ad requests.
+Data Model
+Users: Role-based (Admin, Sponsor, Influencer)
 
-Maintain and update a publicly visible profile.
+Campaigns: Budget, description, goals, visibility, time window
 
-Track collaborations and payment agreements.
+AdRequests: Linked to campaigns & influencers, tracks negotiation, status, payment
 
-🗂️ Database Schema (SQLite)
+Influencer Profiles: Niche, category, reach/followers, public info
 
-The core entities are:
+Frameworks and Libraries Used
+Flask: Main application framework
 
-Users Table (stores Admin, Sponsor, Influencer accounts with role-based field separation)
+Flask-Jinja2: HTML template rendering
 
-Campaigns Table (sponsor_id, name, description, goals, start_date, end_date, budget, visibility)
+Bootstrap: CSS styling and responsive design
 
-Ad Requests Table (campaign_id, influencer_id, requirements, payment_amount, status, messages)
+SQLite: Relational data storage
 
-Profiles Table (specific influencer details like niche, reach, followers)
+(Optional) ChartJS for displaying stats visually
 
-🛠️ Tech Stack
+Running the App
+Clone the repository and unzip in one folder.
 
-Backend: Flask
+Install requirements:
 
-Frontend: Jinja2, Bootstrap, HTML5, CSS3
+text
+pip install flask
+Start the application:
 
-Database: SQLite
+text
+python app.py
+Open http://localhost:5000 in your web browser to use the platform.
 
-Optional Libraries: Chart.js (for statistics visualization), flask_login (for authentication)
+Demo logins are provided for each role.
 
-📊 Core Functionalities
+Database Design (ER Diagram)
+User Table: user_id, role, username, password, (plus profile fields for sponsors/influencers)
 
-User authentication and role-based login.
+Campaign Table: campaign_id, sponsor_id, name, description, start_date, end_date, budget, visibility, goals
 
-Campaign and ad request management (CRUD).
+AdRequest Table: request_id, campaign_id, influencer_id, messages, requirements, payment_amount, status
 
-Search functionality (influencers, campaigns).
+Influencer Table: influencer_id, name, category, niche, reach
 
-Negotiation and contract handling between sponsors and influencers.
+(Relationships: Sponsors create campaigns; Influencers receive ad requests; Admin can flag users/campaigns.)
 
-Admin dashboard with statistics.
+API Resource Endpoints (if implemented)
+/api/users (GET, POST)
+
+/api/campaigns (GET, POST, PUT, DELETE)
+
+/api/adrequests (GET, POST, PUT, DELETE)
+
+Project Submission
+Code is present in this zip file; report is inside as ProjectReport.pdf.
+
+Please refer to the drive link in the report for the presentation video.
+
+All demo and instructions follow the guidelines provided.
+
